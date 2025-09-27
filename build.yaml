@@ -17,12 +17,11 @@
 #     artifact-name: corne_left_with_logging
 #
 ---
-# build.yaml
-
 include:
   - board: seeeduino_xiao_ble
-    shield: AroundForty-TB_R
+    shield: AroundForty-TB_R rgbled_adapter
+    snippet: studio-rpc-usb-uart
   - board: seeeduino_xiao_ble
-    shield: AroundForty-TB_L
+    shield: AroundForty-TB_L rgbled_adapter
   - board: seeeduino_xiao_ble
     shield: settings_reset
