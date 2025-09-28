@@ -9,10 +9,6 @@
 };
 
 / {
-    chosen {
-        zmk,underglow = &rgb_led;
-    };
-
     pmw3610_b_left: pmw3610_b_left {
         compatible = "zmk,encoder-pmw3610-b";
         label = "LEFT_TB";
@@ -22,13 +18,4 @@
         x-invert;
         y-invert;
     };
-
-    rgb_led: rgb_led {
-        compatible = "zmk,ws2812-underglow-widget";
-        leds = <&led_strip>;
-    };
-};
-
-&led_strip {
-    status = "okay";
 };
