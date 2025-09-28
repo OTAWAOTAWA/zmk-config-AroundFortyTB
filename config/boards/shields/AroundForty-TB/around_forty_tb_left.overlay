@@ -1,5 +1,8 @@
 #include "around_forty_tb.dtsi"
 
+// ----------------------------------------------------
+// SPIバスの定義 (トラックボールとLEDで共用)
+// ----------------------------------------------------
 &spi0 {
     compatible = "nordic,nrf-spim";
     status = "okay";
@@ -9,6 +12,15 @@
 };
 
 / {
+    // ▼▼▼【追記箇所 1】▼▼▼
+    chosen {
+        // ZMKのアンダーグロー機能として、下のrgb_ledを割り当てる
+        zmk,underglow = &rgb_led;
+    };
+
+    // ----------------------------------------------------
+    // 左手トラックボールの定義 (変更なし)
+    // ----------------------------------------------------
     pmw3610_b_left: pmw3610_b_left {
         compatible = "zmk,encoder-pmw3610-b"; // エンコーダーとして定義
         label = "LEFT_TB";
@@ -18,4 +30,19 @@
         x-invert;
         y-invert;
     };
+
+    // ▼▼▼【追記箇所 2】▼▼▼
+    // RGB LEDウィジェットの定義
+    rgb_led: rgb_led {
+        compatible = "zmk,ws2812-underglow-widget";
+        // 制御対象として、MCU内蔵のLEDストリップ(&led_strip)を指定
+        leds = <&led_strip>;
+    };
+};
+
+// ▼▼▼【追記箇所 3】▼▼▼
+// XIAO nRF52840のボード定義にあらかじめ用意されている
+// MCU内蔵LED(&led_strip)を有効化する
+&led_strip {
+    status = "okay";
 };
