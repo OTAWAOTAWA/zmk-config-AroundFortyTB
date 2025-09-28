@@ -1,0 +1,1 @@
+zephyr_shield_dts_preinclude_path(${CMAKE_CURRENT_LIST_DIR})
