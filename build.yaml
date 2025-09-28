@@ -19,8 +19,8 @@
 ---
 include:
   - board: seeeduino_xiao_ble
-    shield: around_forty_tb_right rgbled_adapter
+    shield: around_forty_tb_right
   - board: seeeduino_xiao_ble
-    shield: around_forty_tb_left rgbled_adapter
+    shield: around_forty_tb_left
   - board: seeeduino_xiao_ble
     shield: settings_reset
