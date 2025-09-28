@@ -10,17 +10,16 @@
 
 / {
     chosen {
+        zmk,pointing_device = &pmw3610_b_right;
         zmk,underglow = &rgb_led;
     };
 
-    pmw3610_b_left: pmw3610_b_left {
-        compatible = "zmk,encoder-pmw3610-b";
-        label = "LEFT_TB";
+    pmw3610_b_right: pmw3610_b_right {
+        compatible = "zmk,pointing-device-pmw3610-b";
+        label = "RIGHT_TB";
         spi = <&spi0>;
         cs-gpios = <&gpio0 5 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
         mot-gpios = <&gpio0 4 GPIO_ACTIVE_LOW>;
-        x-invert;
-        y-invert;
     };
 
     rgb_led: rgb_led {
