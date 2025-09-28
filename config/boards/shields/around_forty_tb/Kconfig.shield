@@ -1,0 +1,2 @@
+config SHIELD_AROUND_FORTY_TB
+    def_bool $(shields_list_contains,around_forty_tb)
