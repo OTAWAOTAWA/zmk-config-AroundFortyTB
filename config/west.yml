@@ -1,4 +1,4 @@
-manifest:
+manifest: －
   remotes:
     - name: zmkfirmware
       url-base: https://github.com/zmkfirmware
@@ -14,7 +14,7 @@ manifest:
     - name: zmk-pmw3610-driver-b
       remote: razilyis
       revision: main
-    - name: zmk-rgbled-widget  # <-- new entry
+    - name: zmk-rgbled-widget
       remote: caksoylar
       revision: main
   self:
