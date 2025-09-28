@@ -2,13 +2,20 @@
 #include <zephyr/dt-bindings/input/input-event-codes.h>
 
 &kscan0 {
+    row-gpios =
+        <&xiao_d R0 GPIO_ACTIVE_LOW>,
+        <&xiao_d R1 GPIO_ACTIVE_LOW>,
+        <&xiao_d R2 GPIO_ACTIVE_LOW>,
+        <&xiao_d R3 GPIO_ACTIVE_LOW>;
+
     col-gpios =
         <&xiao_d 10 GPIO_ACTIVE_LOW>,
         <&xiao_d  9 GPIO_ACTIVE_LOW>,
         <&xiao_d  8 GPIO_ACTIVE_LOW>,
-        <&gpio0  10 GPIO_ACTIVE_LOW>,
-        <&xiao_d  7 GPIO_ACTIVE_LOW>;
-    diode-direction = "col2row";   // 反応なければ "row2col" に変更して再テスト
+        <&xiao_d  7 GPIO_ACTIVE_LOW>,
+        <&xiao_d  6 GPIO_ACTIVE_LOW>;  // ← 後述の混在回避の例
+
+    diode-direction = "col2row";  // 反応なければ "row2col"
     debounce-press-ms = <3>;
     debounce-release-ms = <5>;
 };
