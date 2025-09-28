@@ -1,72 +1,21 @@
-#include "AroundForty-TB.dtsi"
-#include <zephyr/dt-bindings/input/input-event-codes.h>
-
-&kscan0 {
-    row-gpios =
-        <&xiao_d R0 GPIO_ACTIVE_LOW>,
-        <&xiao_d R1 GPIO_ACTIVE_LOW>,
-        <&xiao_d R2 GPIO_ACTIVE_LOW>,
-        <&xiao_d R3 GPIO_ACTIVE_LOW>;
-
-    col-gpios =
-        <&xiao_d 10 GPIO_ACTIVE_LOW>,
-        <&xiao_d  9 GPIO_ACTIVE_LOW>,
-        <&xiao_d  8 GPIO_ACTIVE_LOW>,
-        <&xiao_d  7 GPIO_ACTIVE_LOW>,
-        <&xiao_d  6 GPIO_ACTIVE_LOW>;  // ← 後述の混在回避の例
-
-    diode-direction = "col2row";  // 反応なければ "row2col"
-    debounce-press-ms = <3>;
-    debounce-release-ms = <5>;
-};
-
-
-/ {
-    trackball_listener {
-        compatible = "zmk,input-listener";
-        device = <&trackball>;
-    };
-};
-
-&pinctrl {
-    spi0_default: spi0_default {
-        group1 {
-            psels = <NRF_PSEL(SPIM_SCK, 0, 5)>,
-                <NRF_PSEL(SPIM_MOSI, 0, 4)>,
-                <NRF_PSEL(SPIM_MISO, 0, 4)>;
-        };
-    };
-
-    spi0_sleep: spi0_sleep {
-        group1 {
-            psels = <NRF_PSEL(SPIM_SCK, 0, 5)>,
-                <NRF_PSEL(SPIM_MOSI, 0, 4)>,
-                <NRF_PSEL(SPIM_MISO, 0, 4)>;
-            low-power-enable;
-        };
-    };
-};
+#include "around_forty_tb.dtsi"
 
 &spi0 {
-    status = "okay";
     compatible = "nordic,nrf-spim";
-    pinctrl-0 = <&spi0_default>;
-    pinctrl-1 = <&spi0_sleep>;
-    pinctrl-names = "default", "sleep";
-    cs-gpios = <&gpio0 9 GPIO_ACTIVE_LOW>;
-
-    trackball: trackball@0 {
     status = "okay";
-    compatible = "pixart,pmw3610";
-    reg = <0>;
-    spi-max-frequency = <2000000>;
-    irq-gpios = <&gpio0 2 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;    // optional: swap-xy; invert-x; invert-y;
-        evt-type = <INPUT_EV_REL>;
-        // optional: swap-xy; invert-x; invert-y;
-        x-input-code = <INPUT_REL_WHEEL>;
-        y-input-code = <INPUT_REL_HWHEEL>;
-        cpi = <600>;
-
-
+    sck-pin = <13>;  // D8, P0.13
+    mosi-pin = <17>; // D10, P0.17
+    miso-pin = <15>; // D9, P0.15
 };
+
+/ {
+    pmw3610_b_left: pmw3610_b_left {
+        compatible = "zmk,encoder-pmw3610-b"; // エンコーダーとして定義
+        label = "LEFT_TB";
+        spi = <&spi0>;
+        cs-gpios = <&gpio0 5 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;   // D5, P0.05
+        mot-gpios = <&gpio0 4 GPIO_ACTIVE_LOW>; // D4, P0.04
+        x-invert;
+        y-invert;
+    };
 };
