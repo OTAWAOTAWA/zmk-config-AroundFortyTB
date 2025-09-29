@@ -1,5 +1,4 @@
 /* seeeduino_xiao_ble + PMW3610 (LEFT / scroll) */
-/* こちらも数値セル指定で統一 */
 
 &pinctrl {
     spi0_left_default: spi0_left_default {
@@ -23,25 +22,24 @@
     pinctrl-1 = <&spi0_left_sleep>;
     pinctrl-names = "default", "sleep";
 
+    /* ★ cs-gpios はバス側 */
+    cs-gpios = <&gpio0 9 GPIO_ACTIVE_LOW>;  /* 実配線に合わせる */
+
     trackball_l: pmw3610@0 {
         compatible = "pixart,pmw3610";
+        status = "okay";
         reg = <0>;
         spi-max-frequency = <2000000>;
 
-        cs-gpios  = <&gpio0 9 GPIO_ACTIVE_LOW>;   /* 実配線に合わせる */
         irq-gpios = <&gpio0 2 GPIO_ACTIVE_LOW>;
+        cpi = <600>;  /* スクロールは低めが扱いやすい */
 
-        cpi = <600>;  /* スクロールは低めに */
+        /* EV_REL=2, 水平=REL_HWHEEL=6, 垂直=REL_WHEEL=8 */
+        evt-type     = <2>;
+        x-input-code = <6>;
+        y-input-code = <8>;
 
-        /* ==== 数値で直指定 ====
-         *   EV_REL = 2, REL_HWHEEL = 6, REL_WHEEL = 8
-         *   X=水平スクロール, Y=垂直スクロール
-         */
-        evt-type     = <2>;   /* EV_REL */
-        x-input-code = <6>;   /* REL_HWHEEL */
-        y-input-code = <8>;   /* REL_WHEEL */
-
-        /* 方向が逆なら適宜補正（ドライバが対応していれば） */
+        /* 方向が逆なら補正 */
         /* invert-x; */
         /* invert-y; */
         /* swap-xy;  */
