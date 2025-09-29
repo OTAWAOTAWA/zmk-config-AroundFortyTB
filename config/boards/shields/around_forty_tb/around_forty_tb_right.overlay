@@ -21,6 +21,7 @@
         mot-gpios = <&gpio0 4 GPIO_ACTIVE_LOW>;
     };
 
-    /* 右手ビルド時は keymap 側で参照している sensors ノードを削除 */
-    /delete-node/ keymap_sensors;
+    /* 右手ビルド時は、左TB専用のスクロール・リスナーノードを削除して
+       未定義ラベル参照や二重リスナー化を防ぐ */
+    /delete-node/ scroll_listener_left;
 };
