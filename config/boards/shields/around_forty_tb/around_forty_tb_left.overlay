@@ -1,21 +1,26 @@
 #include "around_forty_tb.dtsi"
 
+/* 既存の pinctrl を壊さない。status だけ有効化 */
 &spi0 {
-    compatible = "nordic,nrf-spim";
     status = "okay";
-    sck-pin = <13>;
-    mosi-pin = <17>;
-    miso-pin = <15>;
 };
 
-/ {
-    pmw3610_b_left: pmw3610_b_left {
-        compatible = "zmk,encoder-pmw3610-b";
+ / {
+    /* 左手は相対移動デバイス（スクロール変換の元） */
+    pmw3610_b_left: pmw3610@0 {
+        compatible = "zmk,pointing-device-pmw3610-b";
         label = "LEFT_TB";
+        reg = <0>;                       /* ← SPI の Chip Select 番号 */
+        spi-max-frequency = <2000000>;   /* 例: 2MHz（ドライバの推奨に合わせて調整） */
         spi = <&spi0>;
-        cs-gpios = <&gpio0 5 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
+        cs-gpios = <&gpio0 5 GPIO_ACTIVE_LOW>;
         mot-gpios = <&gpio0 4 GPIO_ACTIVE_LOW>;
+
+        /* 必要なら向き補正 */
         x-invert;
         y-invert;
+        // swap-xy;
+        // invert-x;
+        // invert-y;
     };
 };
