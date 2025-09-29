@@ -4,7 +4,7 @@
 &spi0 {
     status = "okay";
 
-    /* SPI子ノードとして定義（reg=CS#、size-cells=0 なので1セルでOK） */
+    /* SPI 子ノードとして PMW3610 を定義（reg は CS# を表す） */
     pmw3610_b_right: pmw3610@0 {
         compatible = "zmk,pointing-device-pmw3610-b";
         label = "RIGHT_TB";
@@ -12,19 +12,13 @@
         spi-max-frequency = <2000000>;
         cs-gpios = <&gpio0 5 GPIO_ACTIVE_LOW>;
         mot-gpios = <&gpio0 4 GPIO_ACTIVE_LOW>;
-        /* 必要に応じて向き補正:
-           // swap-xy;
-           // invert-x;
-           // invert-y;
-        */
+        // 必要なら: swap-xy; invert-x; invert-y;
     };
 };
 
  / {
-    chosen {
-        zmk,pointing_device = &pmw3610_b_right;
-    };
+    chosen { zmk,pointing_device = &pmw3610_b_right; };
 
-    /* 右ビルド時は左用リスナーを削除して未定義/二重処理を回避 */
+    /* 右ビルド時は左用リスナーを削除（未定義/二重処理を防止） */
     /delete-node/ scroll_listener_left;
 };
