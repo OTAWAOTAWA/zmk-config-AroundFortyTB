@@ -30,3 +30,7 @@
         /* 必要なら: swap-xy; invert-x; invert-y; */
     };
 };
+
+&aliases {
+    tb_scroll_source = &pmw3610_b_left;
+};
