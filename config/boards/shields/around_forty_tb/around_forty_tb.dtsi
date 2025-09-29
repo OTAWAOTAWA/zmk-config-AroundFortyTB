@@ -32,22 +32,26 @@
         diode-direction = "col2row";
         wakeup-source;
 
-        /* Row: P0.03 / P0.28 / P0.29 / P1.11 */
-        row-gpios = <&gpio0 3 GPIO_ACTIVE_HIGH>,
-                    <&gpio0 28 GPIO_ACTIVE_HIGH>,
-                    <&gpio0 29 GPIO_ACTIVE_HIGH>,
-                    <&gpio1 11 GPIO_ACTIVE_HIGH>;
+        /* Row: P0.03 / P0.28 / P0.29 / P1.11
+         * → 入力にはプルアップを入れて、押下時にLOWになるようにする
+         */
+        row-gpios = <&gpio0 3 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>,
+                    <&gpio0 28 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>,
+                    <&gpio0 29 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>,
+                    <&gpio1 11 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
 
-        /* Col: P1.15 / P1.14 / P1.13 / P1.12 / P1.10 */
+        /* Col: P1.15 / P1.14 / P1.13 / P1.12 / P1.10
+         * → 出力はアクティブHIGHのままでOK
+         */
         col-gpios = <&gpio1 15 GPIO_ACTIVE_HIGH>,
                     <&gpio1 14 GPIO_ACTIVE_HIGH>,
                     <&gpio1 13 GPIO_ACTIVE_HIGH>,
                     <&gpio1 12 GPIO_ACTIVE_HIGH>,
                     <&gpio1 10 GPIO_ACTIVE_HIGH>;
 
-        /* debounce-period は非推奨 → 新プロパティへ */
-        debounce-press-ms = <5>;
-        debounce-release-ms = <5>;
+        /* バウンス対策（やや強めに） */
+        debounce-press-ms = <8>;
+        debounce-release-ms = <8>;
         debounce-scan-period-ms = <1>;
     };
 };
