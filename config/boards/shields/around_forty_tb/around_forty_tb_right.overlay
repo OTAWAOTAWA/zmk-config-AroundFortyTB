@@ -1,21 +1,20 @@
 #include "around_forty_tb.dtsi"
 
-/* 右/左 overlay の先頭付近（/ の直下でOK）に追加 */
+/* 1) pinctrl 定義 */
 &pinctrl {
     spi0_default: spi0_default {
         group1 {
-            /* SPI0 の SCK/MOSI/MISO を P0.13 / P0.17 / P0.15 に割り当て */
             psels = <NRF_SPI_SCK(0,13) NRF_SPI_MOSI(0,17) NRF_SPI_MISO(0,15)>;
         };
     };
-};
+}
 
-
-/* 既存の pinctrl を壊さず有効化だけする */
+/* 2) spi0 に pinctrl を付与し、PMW3610 を子ノードに */
 &spi0 {
     status = "okay";
+    pinctrl-0 = <&spi0_default>;
+    pinctrl-names = "default";
 
-    /* SPI 子ノードとして PMW3610 を定義（reg は CS# を表す） */
     pmw3610_b_right: pmw3610@0 {
         compatible = "zmk,pointing-device-pmw3610-b";
         label = "RIGHT_TB";
@@ -23,13 +22,10 @@
         spi-max-frequency = <2000000>;
         cs-gpios = <&gpio0 5 GPIO_ACTIVE_LOW>;
         mot-gpios = <&gpio0 4 GPIO_ACTIVE_LOW>;
-        // 必要なら: swap-xy; invert-x; invert-y;
     };
 };
 
  / {
     chosen { zmk,pointing_device = &pmw3610_b_right; };
-
-    /* 右ビルド時は左用リスナーを削除（未定義/二重処理を防止） */
     /delete-node/ scroll_listener_left;
 };
