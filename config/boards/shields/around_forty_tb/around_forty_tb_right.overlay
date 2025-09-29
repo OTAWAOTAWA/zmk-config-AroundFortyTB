@@ -41,5 +41,5 @@
 };
 
 &aliases {
-    tb_scroll_source = &pmw3610_b_left;
+    tb_scroll_source = &pmw3610_b_right;
 };
