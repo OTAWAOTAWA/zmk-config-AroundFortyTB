@@ -1,7 +1,23 @@
 #include "around_forty_tb.dtsi"
 
+/* 既存の pinctrl を壊さず有効化だけする */
 &spi0 {
     status = "okay";
+
+    /* SPI子ノードとして定義（reg=CS#、size-cells=0 なので1セルでOK） */
+    pmw3610_b_right: pmw3610@0 {
+        compatible = "zmk,pointing-device-pmw3610-b";
+        label = "RIGHT_TB";
+        reg = <0>;
+        spi-max-frequency = <2000000>;
+        cs-gpios = <&gpio0 5 GPIO_ACTIVE_LOW>;
+        mot-gpios = <&gpio0 4 GPIO_ACTIVE_LOW>;
+        /* 必要に応じて向き補正:
+           // swap-xy;
+           // invert-x;
+           // invert-y;
+        */
+    };
 };
 
  / {
@@ -9,16 +25,6 @@
         zmk,pointing_device = &pmw3610_b_right;
     };
 
-    pmw3610_b_right: pmw3610@0 {
-        compatible = "zmk,pointing-device-pmw3610-b";
-        label = "RIGHT_TB";
-        reg = <0>;
-        spi-max-frequency = <2000000>;
-        spi = <&spi0>;
-        cs-gpios = <&gpio0 5 GPIO_ACTIVE_LOW>;
-        mot-gpios = <&gpio0 4 GPIO_ACTIVE_LOW>;
-    };
-
-    /* 右ビルド時は左用リスナーを消す（未定義参照/二重処理を防止） */
+    /* 右ビルド時は左用リスナーを削除して未定義/二重処理を回避 */
     /delete-node/ scroll_listener_left;
 };
