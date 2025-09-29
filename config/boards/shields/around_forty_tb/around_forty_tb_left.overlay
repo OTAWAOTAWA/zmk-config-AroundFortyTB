@@ -1,6 +1,11 @@
 /* Left half (peripheral) — badjeff の encoder ドライバで PMW3610 を使用 */
 #include "around_forty_tb.dtsi"
 
+/* around_forty_tb_left.overlay のどこかに追加（include後ならOK） */
+&default_transform {
+    col-offset = <0>;   /* 左手はオフセットなし */
+};
+
 /* UART 無効化（任意） */
 &xiao_serial { status = "disabled"; };
 
