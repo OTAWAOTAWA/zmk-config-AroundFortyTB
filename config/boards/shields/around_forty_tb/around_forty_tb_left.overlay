@@ -1,20 +1,16 @@
-/* Left half (peripheral) — PMW3610 を badjeff の encoder ドライバで
- * スクロール専用入力にする例。
- * SPI/IRQ ピンは右と同じマッピング（左側基板でも同配線の場合）。
- */
-
+/* Left half (peripheral) — badjeff の encoder ドライバで PMW3610 を使用 */
 #include "around_forty_tb.dtsi"
 
-/* UART無効化（省電力＆ピン競合回避） */
+/* UART 無効化（任意） */
 &xiao_serial { status = "disabled"; };
 
 /* ---- SPI pinctrl（左） ---- */
 &pinctrl {
     spi0_default: spi0_default {
         group1 {
-            psels = <NRF_PSEL(SPIM_SCK,  0, 5)>,
-                    <NRF_PSEL(SPIM_MOSI, 0, 4)>,
-                    <NRF_PSEL(SPIM_MISO, 1, 14)>;
+            psels = <NRF_PSEL(SPIM_SCK,  0, 5)>,  /* SCK  = P0.05 (D5) */
+                    <NRF_PSEL(SPIM_MOSI, 0, 4)>,  /* MOSI = P0.04 (D4) */
+                    <NRF_PSEL(SPIM_MISO, 1, 14)>; /* MISO = P1.14 (D9) */
         };
     };
 
@@ -26,9 +22,9 @@
             low-power-enable;
         };
     };
-}
+};
 
-/* ---- PMW3610（左, encoder モード＝スクロール出力） ---- */
+/* ---- PMW3610（左, encoder モード） ---- */
 &spi0 {
     status = "okay";
     compatible = "nordic,nrf-spim";
@@ -36,7 +32,7 @@
     pinctrl-1 = <&spi0_sleep>;
     pinctrl-names = "default", "sleep";
 
-    /* CS = P0.09（左基板でも同ピン配線ならそのまま） */
+    /* CS = P0.09 (Active Low) */
     cs-gpios = <&gpio0 9 GPIO_ACTIVE_LOW>;
 
     pmw3610_b_left: pmw3610@0 {
@@ -45,9 +41,10 @@
         label = "LEFT_TB";
         reg = <0>;
         spi-max-frequency = <2000000>;
+        /* MOTION/IRQ = P0.02（Active Low + Pull-up） */
         irq-gpios = <&gpio0 2 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
 
-        /* 必要に応じて反転・軸入替
+        /* 必要に応じて向き調整
          * x-invert;
          * y-invert;
          * swap-xy;
