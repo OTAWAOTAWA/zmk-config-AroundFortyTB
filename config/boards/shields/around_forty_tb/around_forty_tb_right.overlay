@@ -1,6 +1,6 @@
 
 #include "around_forty_tb.dtsi"
-
+#include <zephyr/dt-bindings/input/input-event-codes.h>
 &default_transform {
     col-offset = <6>;
 };
@@ -15,13 +15,6 @@
             ;
 };
 
-/ {
-    trackball_listener {
-        compatible = "zmk,input-listener";
-        device = <&trackball>;
-
-    };
-};
 
 &pinctrl {
     spi0_default: spi0_default {
@@ -44,7 +37,6 @@
 
 &xiao_serial { status = "disabled"; };
 
-#include <zephyr/dt-bindings/input/input-event-codes.h>
 
 &spi0 {
     status = "okay";
@@ -59,6 +51,7 @@
         compatible = "pixart,pmw3610";
         reg = <0>;
         spi-max-frequency = <2000000>;
+        cpi = <400>;
         irq-gpios = <&gpio0 2 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
         // automouse-layer = <6>;
         // swap-xy; /* optional */
