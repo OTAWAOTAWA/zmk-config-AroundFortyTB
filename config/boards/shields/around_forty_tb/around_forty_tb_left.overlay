@@ -1,3 +1,5 @@
+#include "around_forty_tb.dtsi"
+
 /* seeeduino_xiao_ble + PMW3610 (LEFT / scroll) */
 
 &pinctrl {
