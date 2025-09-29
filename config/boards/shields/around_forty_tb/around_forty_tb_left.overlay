@@ -1,53 +1,56 @@
-#include "around_forty_tb.dtsi"
-#include <zephyr/dt-bindings/pinctrl/nrf-pinctrl.h>
-#include <input/processors.dtsi>
+/* Left half (peripheral) — PMW3610 を badjeff の encoder ドライバで
+ * スクロール専用入力にする例。
+ * SPI/IRQ ピンは右と同じマッピング（左側基板でも同配線の場合）。
+ */
 
-/* SPI0 用 pinctrl（配線に合わせてポート/ピンは変更可） */
+#include "around_forty_tb.dtsi"
+
+/* UART無効化（省電力＆ピン競合回避） */
+&xiao_serial { status = "disabled"; };
+
+/* ---- SPI pinctrl（左） ---- */
 &pinctrl {
     spi0_default: spi0_default {
         group1 {
-            psels = <
-                NRF_PSEL(SPIM_SCK,  0,  5)
-                NRF_PSEL(SPIM_MOSI, 0,  4)
-                NRF_PSEL(SPIM_MISO, 0, 13)
-            >;
+            psels = <NRF_PSEL(SPIM_SCK,  0, 5)>,
+                    <NRF_PSEL(SPIM_MOSI, 0, 4)>,
+                    <NRF_PSEL(SPIM_MISO, 1, 14)>;
         };
     };
-};
 
-/* spi0 を有効化し、PMW3610 を子ノードとして定義 */
+    spi0_sleep: spi0_sleep {
+        group1 {
+            psels = <NRF_PSEL(SPIM_SCK,  0, 5)>,
+                    <NRF_PSEL(SPIM_MOSI, 0, 4)>,
+                    <NRF_PSEL(SPIM_MISO, 1, 14)>;
+            low-power-enable;
+        };
+    };
+}
+
+/* ---- PMW3610（左, encoder モード＝スクロール出力） ---- */
 &spi0 {
     status = "okay";
+    compatible = "nordic,nrf-spim";
     pinctrl-0 = <&spi0_default>;
-    pinctrl-names = "default";
+    pinctrl-1 = <&spi0_sleep>;
+    pinctrl-names = "default", "sleep";
+
+    /* CS = P0.09（左基板でも同ピン配線ならそのまま） */
+    cs-gpios = <&gpio0 9 GPIO_ACTIVE_LOW>;
 
     pmw3610_b_left: pmw3610@0 {
-        compatible = "zmk,pointing-device-pmw3610-b";
+        status = "okay";
+        compatible = "zmk,encoder-pmw3610-b";
         label = "LEFT_TB";
-        status = "okay";
-        reg = <0>;                      /* CS#0 */
+        reg = <0>;
         spi-max-frequency = <2000000>;
-        cs-gpios  = <&gpio0 15 GPIO_ACTIVE_LOW>;
-        mot-gpios = <&gpio0  2 GPIO_ACTIVE_LOW>;
-        /* 必要なら:
-         *   swap-xy;
-         *   invert-x;
-         *   invert-y;
-         */
-    };
-};
+        irq-gpios = <&gpio0 2 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
 
-/* ★ 左側だけにスクロール・リスナーを配置（右では存在しないので未定義参照が起きない） */
- / {
-    scroll_listener_left: scroll_listener_left {
-        compatible = "zmk,input-listener";
-        device = <&pmw3610_b_left>;
-        status = "okay";
-        /* X→水平スクロール, Y→垂直スクロール。感度は 1x1（必要に応じて調整） */
-        input-processors = <&zip_xy_to_scroll_mapper>, <&zip_xy_scaler 1 1>;
-        /* 方向が逆/入替したい場合の例：
-         *   input-processors = <&zip_xy_to_scroll_mapper>, <&zip_xy_scaler 1 1>, <&zip_invert_x>;
-         *   input-processors = <&zip_xy_to_scroll_mapper>, <&zip_xy_scaler 1 1>, <&zip_swap_xy>;
+        /* 必要に応じて反転・軸入替
+         * x-invert;
+         * y-invert;
+         * swap-xy;
          */
     };
 };
