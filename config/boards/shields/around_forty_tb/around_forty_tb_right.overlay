@@ -11,16 +11,17 @@
 &pinctrl {
     spi0_default: spi0_default {
         group1 {
-            psels = <NRF_PSEL(SPIM_SCK,  0, 5)>,
-                    <NRF_PSEL(SPIM_MOSI, 0, 4)>,
-                    <NRF_PSEL(SPIM_MISO, 0, 4)>;
+            /* 回路図と公式ピン配置図に基づく定義 */
+            psels = <NRF_PSEL(SPIM_SCK,  0, 5)>,   /* SCLK -> P0.05 */
+                    <NRF_PSEL(SPIM_MOSI, 0, 4)>,   /* SDIO -> P0.04 */
+                    <NRF_PSEL(SPIM_MISO, 0, 30)>;  /* MISO -> 重複を避けるため未使用ピン(P0.30)を指定 */
         };
     };
     spi0_sleep: spi0_sleep {
         group1 {
             psels = <NRF_PSEL(SPIM_SCK,  0, 5)>,
                     <NRF_PSEL(SPIM_MOSI, 0, 4)>,
-                    <NRF_PSEL(SPIM_MISO, 0, 4)>;
+                    <NRF_PSEL(SPIM_MISO, 0, 30)>;
             low-power-enable;
         };
     };
@@ -39,6 +40,7 @@
         compatible = "pixart,pmw3610";
         reg = <0>;
         spi-max-frequency = <2000000>;
+        /* MOTIONピンは回路図通り P0.02 (D1) で正しい */
         irq-gpios = <&gpio0 2 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>; /* MOT/IRQ=P0.02 */
     };
 }
