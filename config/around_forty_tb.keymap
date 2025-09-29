@@ -24,38 +24,17 @@
         };
     };
 
-keymap {
-        compatible = "zmk,keymap";
-
-        default_layer {
-            bindings = <
-            // Left Hand                                   Right Hand
-            &trans &trans &trans &trans &trans &trans    &trans &trans &trans &trans &trans &trans
-            &trans &trans &trans &trans &trans &trans    &trans &trans &trans &trans &trans &trans
-            &trans &trans &trans &trans &trans &trans    &trans &trans &trans &trans &trans &trans
-            &trans &trans &trans &trans &trans &trans    &trans &trans &trans &trans &trans &trans
-            >;
-        };
-
-        LOWER {
-            bindings = <
-            // Layer 1 keymap
-            &trans &trans &trans &trans &trans &trans    &trans &trans &trans &trans &trans &trans
-            &trans &trans &trans &trans &trans &trans    &trans &trans &trans &trans &trans &trans
-            &trans &trans &trans &trans &trans &trans    &trans &trans &trans &trans &trans &trans
-            &trans &trans &trans &trans &trans &trans    &trans &trans &trans &trans &trans &trans
-            >;
-        };
-
-        RAISE {
-            bindings = <
-            // Layer 2 keymap
-            &trans &trans &trans &trans &trans &trans    &trans &trans &trans &trans &trans &trans
-            &trans &trans &trans &trans &trans &trans    &trans &trans &trans &trans &trans &trans
-            &trans &trans &trans &trans &trans &trans    &trans &trans &trans &trans &trans &trans
-            &trans &trans &trans &trans &trans &trans    &trans &trans &trans &trans &trans &trans
-            >;
-        };
+    keymap {
+            compatible = "zmk,keymap";
+    
+            default_layer {
+                bindings = <
+                &kp A &none &none &none &none &none        &none &none &none &none &none &none
+                &none &none &none &none &none &none        &none &none &none &none &none &none
+                &none &none &none &none &none &none        &none &none &none &none &none &none
+                &none &none &none &none &none &none        &none &none &none &none &none &none
+                >;
+            };
     };
 
 };
