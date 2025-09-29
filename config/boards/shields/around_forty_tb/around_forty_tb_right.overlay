@@ -20,4 +20,7 @@
         cs-gpios = <&gpio0 5 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
         mot-gpios = <&gpio0 4 GPIO_ACTIVE_LOW>;
     };
+
+    /* 右手ビルド時は keymap 側で参照している sensors ノードを削除 */
+    /delete-node/ keymap_sensors;
 };
