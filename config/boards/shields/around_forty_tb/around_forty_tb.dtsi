@@ -13,21 +13,24 @@
     };
 
     chosen {
-        /* これで zmk_matrix_transform_default が生成される */
         zmk,matrix-transform = &default;
-        /* 走査対象の KSCAN をこのシールドで定義している旨も明示 */
         zmk,kscan = &kscan0;
     };
 };
 
-/* 行列スキャンの定義。Row/Col はご提示回路に合わせています */
+/* Zephyr 3.5 以降：NFCT を GPIO 化するには UICR を DT で指定 */
+&uicr {
+    nfct-pins-as-gpios;
+};
+
 &gpio0 { status = "okay"; };
 &gpio1 { status = "okay"; };
 
-/ {
+ /{
     kscan0: kscan {
         compatible = "zmk,kscan-gpio-matrix";
         diode-direction = "col2row";
+        wakeup-source;
 
         /* Row: P0.03 / P0.28 / P0.29 / P1.11 */
         row-gpios = <&gpio0 3 GPIO_ACTIVE_HIGH>,
@@ -42,6 +45,9 @@
                     <&gpio1 12 GPIO_ACTIVE_HIGH>,
                     <&gpio1 10 GPIO_ACTIVE_HIGH>;
 
-        debounce-period = <5>;
+        /* debounce-period は非推奨 → 新プロパティへ */
+        debounce-press-ms = <5>;
+        debounce-release-ms = <5>;
+        debounce-scan-period-ms = <1>;
     };
 };
