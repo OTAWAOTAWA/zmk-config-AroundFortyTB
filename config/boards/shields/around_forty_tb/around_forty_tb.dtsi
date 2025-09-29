@@ -9,14 +9,11 @@
 #include <dt-bindings/zmk/matrix_transform.h>
 
  / {
-    /* ---- 40キー用の共通トランスフォーム ---- */
     default_transform: keymap_transform_0 {
         compatible = "zmk,matrix-transform";
         rows = <4>;
         columns = <10>;
-        col-offset = <0>; /* left/right overlay で上書き */
-
-        /* 左上→右下の行優先で 40 キーを並べる */
+        col-offset = <0>;
         map = <
             0  1  2  3  4   5  6  7  8  9
             10 11 12 13 14  15 16 17 18 19
