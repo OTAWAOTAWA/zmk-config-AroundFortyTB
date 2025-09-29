@@ -1,4 +1,5 @@
-/* seeeduino_xiao_ble + PMW3610 (LEFT / (later) scroll) */
+/* seeeduino_xiao_ble + PMW3610 (LEFT / scroll) */
+#include <zephyr/dt-bindings/input/input-event-codes.h>
 
 &pinctrl {
     spi0_left_default: spi0_left_default {
@@ -27,25 +28,25 @@
         reg = <0>;
         spi-max-frequency = <2000000>;
 
-        /* CS = P0.09（左右同配線ならそのまま）。別ピンなら変更 */
-        cs-gpios  = <&gpio0 9 GPIO_ACTIVE_LOW>;
+        cs-gpios  = <&gpio0 9 GPIO_ACTIVE_LOW>;                     /* 実配線に合わせる */
         irq-gpios = <&gpio0 2 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
 
-        /* 左は低めの CPI で扱いやすく */
-        cpi = <600>;
+        cpi = <600>;                                                /* スクロールは低めが扱いやすい */
 
-        evt-type = "pointer";
+        /* イベント＝相対、X=水平スクロール、Y=垂直スクロール */
+        evt-type     = <INPUT_EV_REL>;
+        x-input-code = <INPUT_REL_HWHEEL>;                          /* ← 左右スクロール */
+        y-input-code = <INPUT_REL_WHEEL>;                           /* ← 上下スクロール */
 
-        /* 必要に応じて軸補正（例：swap-xy; x-invert; y-invert;） */
-        /* swap-xy; */
-        /* x-invert; */
-        /* y-invert; */
+        /* 方向が逆なら下のどれかを付ける */
+        /* invert-x; */   /* 水平スクロール方向反転 */
+        /* invert-y; */   /* 垂直スクロール方向反転 */
+        /* swap-xy; */    /* 必要なら軸入れ替え */
     };
 };
 
  /{
     chosen {
-        /* 左手＝（当面）通常ポインタ。後でスクロール変換に置き換え可能 */
         zmk,pointing-device = &trackball_l;
     };
 };
