@@ -1,40 +1,16 @@
-#include <behaviors.dtsi>
 #include <dt-bindings/zmk/keys.h>
-#include <dt-bindings/zmk/pointing.h>
-
-// Define layer names
-#define BASE 0
-#define LOWER 1
-#define RAISE 2
 
 / {
-    // Left trackball scroll configuration
-    sensors {
-        compatible = "zmk,keymap-sensors";
-        sensors = <&pmw3610_b_left>;
-        triggers-per-rotation = <20>; // Scroll sensitivity
-        bindings = <&scroll_behavior>;
-    };
+    keymap {
+        compatible = "zmk,keymap";
 
-    behaviors {
-        scroll_behavior: scroll_behavior {
-            compatible = "zmk,behavior-sensor-rotate";
-            label = "SCROLL_BEHAVIOR";
-            bindings = <&mwh V SCROLL_DOWN &mwh H SCROLL_RIGHT &mwh V SCROLL_UP &mwh H SCROLL_LEFT>;
+        default_layer {
+            bindings = <
+            &kp A &none &none &none &none &none        &none &none &none &none &none &none
+            &none &none &none &none &none &none        &none &none &none &none &none &none
+            &none &none &none &none &none &none        &none &none &none &none &none &none
+            &none &none &none &none &none &none        &none &none &none &none &none &none
+            >;
         };
     };
-
-    keymap {
-            compatible = "zmk,keymap";
-    
-            default_layer {
-                bindings = <
-                &kp A &none &none &none &none &none        &none &none &none &none &none &none
-                &none &none &none &none &none &none        &none &none &none &none &none &none
-                &none &none &none &none &none &none        &none &none &none &none &none &none
-                &none &none &none &none &none &none        &none &none &none &none &none &none
-                >;
-            };
-    };
-
 };
