@@ -1,5 +1,8 @@
 /* seeeduino_xiao_ble + PMW3610 (RIGHT / pointer move) */
 
+/* ← これが大事：INPUT_* マクロを使うのでヘッダをインクルード */
+#include <zephyr/dt-bindings/input/input-event-codes.h>
+
 /* SPI ピン定義（3-wire: SCK=P0.05, SDIO/MOSI=P0.04） */
 &pinctrl {
     spi0_right_default: spi0_right_default {
@@ -24,30 +27,12 @@
     pinctrl-names = "default", "sleep";
 
     trackball_r: pmw3610@0 {
-        /* ★ ドライバの bindings に合わせて compatible を調整してください。
-           そのままでも多くの環境で 'pixart,pmw3610' が受け付けられます。 */
+        /* ドライバの例に合わせる */
         compatible = "pixart,pmw3610";
         reg = <0>;
         spi-max-frequency = <2000000>;
 
-        /* CS = P0.09（NFC1）。別ピンなら 9 を該当番号に変更 */
+        /* CS = P0.09（実配線に合わせて変更可） */
         cs-gpios  = <&gpio0 9 GPIO_ACTIVE_LOW>;
-
         /* MOTION 割り込み = P0.02（プルアップ推奨） */
-        irq-gpios = <&gpio0 2 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
-
-        /* 感度（必要に応じて調整） */
-        cpi = <1200>;
-
-        evt-type = "pointer";
-
-        /* three-wire;  // ドライバで 3-wire 指定が必要ならコメント解除 */
-    };
-};
-
-/* 右手＝ポインティングデバイスはこのセンサー */
- /{
-    chosen {
-        zmk,pointing-device = &trackball_r;
-    };
-};
+        irq-gpios = <&gpio0 2 (GPIO_ACTIVE_LOW | GPIO_PU_
