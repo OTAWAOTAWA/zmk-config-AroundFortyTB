@@ -1,5 +1,7 @@
 /* seeeduino_xiao_ble + PMW3610 (RIGHT / pointer move) */
+#include "around_forty_tb.dtsi"   /* ★ dtsi を必ず取り込む */
 
+/* SPI ピン定義（3-wire: SCK=P0.05, SDIO/MOSI=P0.04） */
 &pinctrl {
     spi0_right_default: spi0_right_default {
         group1 {
@@ -22,8 +24,8 @@
     pinctrl-1 = <&spi0_right_sleep>;
     pinctrl-names = "default", "sleep";
 
-    /* ★ cs-gpios は子ではなくバス側(&spi0)に置く */
-    cs-gpios = <&gpio0 9 GPIO_ACTIVE_LOW>;  /* CS=P0.09（実配線に合わせて変更） */
+    /* cs-gpios はバス側に置く */
+    cs-gpios = <&gpio0 9 GPIO_ACTIVE_LOW>;  /* ← 実配線に合わせて 9→10 などへ */
 
     trackball_r: pmw3610@0 {
         compatible = "pixart,pmw3610";
@@ -31,24 +33,20 @@
         reg = <0>;
         spi-max-frequency = <2000000>;
 
-        /* MOTION 割り込み = P0.02 */
+        /* MOTION 割り込み = P0.02（まずは単一フラグで） */
         irq-gpios = <&gpio0 2 GPIO_ACTIVE_LOW>;
 
         /* 解像度 */
         cpi = <1200>;
 
-        /* イベント（数値直書き）: EV_REL=2, REL_X=0, REL_Y=1 */
+        /* 数値直書き: EV_REL=2, REL_X=0, REL_Y=1 */
         evt-type     = <2>;
         x-input-code = <0>;
         y-input-code = <1>;
-
-        /* 必要なら反転/入替 */
-        /* invert-x; */
-        /* invert-y; */
-        /* swap-xy;  */
     };
 };
 
+/* 右手＝ポインティングデバイス */
  /{
     chosen {
         zmk,pointing-device = &trackball_r;
