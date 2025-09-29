@@ -1,9 +1,6 @@
 /* seeeduino_xiao_ble + PMW3610 (RIGHT / pointer move) */
+/* 数値セルのみで指定して、DTS の式解釈エラーを避ける */
 
-/* ← これが大事：INPUT_* マクロを使うのでヘッダをインクルード */
-#include <zephyr/dt-bindings/input/input-event-codes.h>
-
-/* SPI ピン定義（3-wire: SCK=P0.05, SDIO/MOSI=P0.04） */
 &pinctrl {
     spi0_right_default: spi0_right_default {
         group1 {
@@ -27,12 +24,35 @@
     pinctrl-names = "default", "sleep";
 
     trackball_r: pmw3610@0 {
-        /* ドライバの例に合わせる */
         compatible = "pixart,pmw3610";
         reg = <0>;
         spi-max-frequency = <2000000>;
 
-        /* CS = P0.09（実配線に合わせて変更可） */
+        /* CS = P0.09 （実配線に合わせて変更）*/
         cs-gpios  = <&gpio0 9 GPIO_ACTIVE_LOW>;
-        /* MOTION 割り込み = P0.02（プルアップ推奨） */
-        irq-gpios = <&gpio0 2 (GPIO_ACTIVE_LOW | GPIO_PU_
+
+        /* MOTION = P0.02。まずは単一フラグで（合成はやめる） */
+        irq-gpios = <&gpio0 2 GPIO_ACTIVE_LOW>;
+
+        cpi = <1200>;
+
+        /* ==== ここを数値で直指定 ==== 
+         * Linux input codes:
+         *   EV_REL = 2, REL_X = 0, REL_Y = 1
+         */
+        evt-type     = <2>;   /* EV_REL */
+        x-input-code = <0>;   /* REL_X */
+        y-input-code = <1>;   /* REL_Y */
+
+        /* 必要に応じて向き補正（ドライバが対応していれば） */
+        /* invert-x; */
+        /* invert-y; */
+        /* swap-xy;  */
+    };
+};
+
+ /{
+    chosen {
+        zmk,pointing-device = &trackball_r;
+    };
+};
