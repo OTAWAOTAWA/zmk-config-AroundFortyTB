@@ -1,5 +1,3 @@
-#include "around_forty_tb.dtsi"
-
 &spi0 {
     compatible = "nordic,nrf-spim";
     status = "okay";
