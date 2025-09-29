@@ -9,19 +9,16 @@
 &xiao_serial { status = "disabled"; };
 
 &pinctrl {
-    spi0_default: spi0_default {
+    spi0_right_default: spi0_right_default {
         group1 {
-            /* 回路図と公式ピン配置図に基づく定義 */
-            psels = <NRF_PSEL(SPIM_SCK,  0, 5)>,   /* SCLK -> P0.05 */
-                    <NRF_PSEL(SPIM_MOSI, 0, 4)>,   /* SDIO -> P0.04 */
-                    <NRF_PSEL(SPIM_MISO, 0, 30)>;  /* MISO -> 重複を避けるため未使用ピン(P0.30)を指定 */
+            psels = <NRF_PSEL(SPIM_SCK,  0, 5)>,   /* SCLK=P0.05 */
+                    <NRF_PSEL(SPIM_MOSI, 0, 4)>;   /* SDIO=P0.04 (3-wire) */
         };
     };
-    spi0_sleep: spi0_sleep {
+    spi0_right_sleep: spi0_right_sleep {
         group1 {
             psels = <NRF_PSEL(SPIM_SCK,  0, 5)>,
-                    <NRF_PSEL(SPIM_MOSI, 0, 4)>,
-                    <NRF_PSEL(SPIM_MISO, 0, 30)>;
+                    <NRF_PSEL(SPIM_MOSI, 0, 4)>;
             low-power-enable;
         };
     };
@@ -29,24 +26,23 @@
 
 &spi0 {
     status = "okay";
-    compatible = "nordic,nrf-spim";
-    pinctrl-0 = <&spi0_default>;
-    pinctrl-1 = <&spi0_sleep>;
+    pinctrl-0 = <&spi0_right_default>;
+    pinctrl-1 = <&spi0_right_sleep>;
     pinctrl-names = "default", "sleep";
-    cs-gpios = <&gpio0 9 GPIO_ACTIVE_LOW>;  /* CS=P0.09 */
 
-    trackball_r: trackball@0 {
-        status = "okay";
-        compatible = "pixart,pmw3610";
+    trackball_r: pmw3610@0 {
+        compatible = "zmk,pmw3610-b";      /* ドライバの compatible 名に合わせる */
         reg = <0>;
         spi-max-frequency = <2000000>;
-        /* MOTIONピンは回路図通り P0.02 (D1) で正しい */
-        irq-gpios = <&gpio0 2 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>; /* MOT/IRQ=P0.02 */
+        cs-gpios  = <&gpio0 9 GPIO_ACTIVE_LOW>;    /* CS=P0.09 */
+        irq-gpios = <&gpio0 2 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>; /* MOTION=P0.02 */
+        cpi = <1200>;
+        /* three-wire;  // 3線式が必要ならドライバのREADME通りに */
     };
-}
-
-/* 必要なら右手をポインティングデバイスに指定
-/ {
-    chosen { zmk,pointing_device = &trackball_r; };
 };
-*/
+
+ /{
+    chosen {
+        zmk,pointing-device = &trackball_r;
+    };
+};
