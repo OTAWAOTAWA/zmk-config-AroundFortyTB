@@ -5,6 +5,11 @@
 
 #include "around_forty_tb.dtsi"
 
+/* around_forty_tb_right.overlay のどこかに追加（include後ならOK） */
+&default_transform {
+    col-offset = <5>;   /* 左手5列ぶん右へシフト */
+};
+
 /* UART無効化（任意） */
 &xiao_serial { status = "disabled"; };
 
