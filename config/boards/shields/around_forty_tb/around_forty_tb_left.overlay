@@ -1,7 +1,5 @@
 #include "around_forty_tb.dtsi"
 
-CONFIG_ZMK_SPLIT_ROLE_PERIPHERAL=y
-
 &spi0 {
     compatible = "nordic,nrf-spim";
     status = "okay";
