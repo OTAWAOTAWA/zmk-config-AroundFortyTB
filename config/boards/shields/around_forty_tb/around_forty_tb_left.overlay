@@ -1,6 +1,5 @@
-#include "around_forty_tb.dtsi"
-
 /* seeeduino_xiao_ble + PMW3610 (LEFT / scroll) */
+#include "around_forty_tb.dtsi"   /* ★ dtsi を必ず取り込む */
 
 &pinctrl {
     spi0_left_default: spi0_left_default {
@@ -24,8 +23,7 @@
     pinctrl-1 = <&spi0_left_sleep>;
     pinctrl-names = "default", "sleep";
 
-    /* ★ cs-gpios はバス側 */
-    cs-gpios = <&gpio0 9 GPIO_ACTIVE_LOW>;  /* 実配線に合わせる */
+    cs-gpios = <&gpio0 9 GPIO_ACTIVE_LOW>;   /* 実配線に合わせて変更 */
 
     trackball_l: pmw3610@0 {
         compatible = "pixart,pmw3610";
@@ -34,14 +32,14 @@
         spi-max-frequency = <2000000>;
 
         irq-gpios = <&gpio0 2 GPIO_ACTIVE_LOW>;
-        cpi = <600>;  /* スクロールは低めが扱いやすい */
+        cpi = <600>;  /* スクロール用に低め */
 
-        /* EV_REL=2, 水平=REL_HWHEEL=6, 垂直=REL_WHEEL=8 */
+        /* 数値直書き: EV_REL=2, 水平=REL_HWHEEL=6, 垂直=REL_WHEEL=8 */
         evt-type     = <2>;
         x-input-code = <6>;
         y-input-code = <8>;
 
-        /* 方向が逆なら補正 */
+        /* 必要なら反転 */
         /* invert-x; */
         /* invert-y; */
         /* swap-xy;  */
