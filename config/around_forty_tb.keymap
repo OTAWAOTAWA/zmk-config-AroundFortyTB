@@ -1,25 +1,28 @@
-&spi0 {
-    compatible = "nordic,nrf-spim";
-    status = "okay";
-    sck-pin = <13>;
-    mosi-pin = <17>;
-    miso-pin = <15>;
-};
+#include <behaviors.dtsi>
+#include <dt-bindings/zmk/keys.h>
+#include <dt-bindings/zmk/pointing.h>
+#include <input/processors.dtsi>
+
+#define BASE  0
+#define LOWER 1
+#define RAISE 2
 
 / {
-    /* 左手は相対移動デバイスとして定義（スクロール変換の元になる） */
-    pmw3610_b_left: pmw3610_b_left {
-        compatible = "zmk,pointing-device-pmw3610-b";
-        label = "LEFT_TB";
-        spi = <&spi0>;
-        cs-gpios = <&gpio0 5 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
-        mot-gpios = <&gpio0 4 GPIO_ACTIVE_LOW>;
+    scroll_listener_left: scroll_listener_left {
+        compatible = "zmk,input-listener";
+        device = <&pmw3610_b_left>;
+        status = "okay";
+        input-processors = <
+            &zip_xy_to_scroll_mapper    /* X→水平スクロール, Y→垂直スクロール */
+            &zip_xy_scaler 1 1          /* 感度（必要に応じて 2 2 / 3 3 などに） */
+            /* 方向が逆なら &zip_invert_x / &zip_invert_y、入替なら &zip_swap_xy を追加 */
+        >;
+    };
 
-        /* 必要なら向き補正（ドライバのbindingsに合わせてください） */
-        x-invert;
-        y-invert;
-        // swap-xy;
-        // invert-x;
-        // invert-y;
+    keymap {
+        compatible = "zmk,keymap";
+        BASE { bindings = < /* 省略（前回貼ったものでOK） */ >; }
+        LOWER{ bindings = < /* 〃 */ >; }
+        RAISE{ bindings = < /* 〃 */ >; }
     };
 };
