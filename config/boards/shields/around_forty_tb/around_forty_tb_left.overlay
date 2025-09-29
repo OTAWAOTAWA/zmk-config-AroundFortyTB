@@ -20,44 +20,32 @@
     spi0_left_default: spi0_left_default {
         group1 {
             psels = <NRF_PSEL(SPIM_SCK,  0, 5)>,  /* P0.05 */
-                    <NRF_PSEL(SPIM_MOSI, 0, 4)>,  /* P0.04 */
-                    <NRF_PSEL(SPIM_MISO, 1, 14)>; /* P1.14 */
+                    <NRF_PSEL(SPIM_MOSI, 0, 4)>;  /* P0.04 (SDIO) */
         };
     };
-
     spi0_left_sleep: spi0_left_sleep {
         group1 {
             psels = <NRF_PSEL(SPIM_SCK,  0, 5)>,
-                    <NRF_PSEL(SPIM_MOSI, 0, 4)>,
-                    <NRF_PSEL(SPIM_MISO, 1, 14)>;
+                    <NRF_PSEL(SPIM_MOSI, 0, 4)>;
             low-power-enable;
         };
     };
 };
 
-/* ---- PMW3610（左, encoder） ---- */
 &spi0 {
     status = "okay";
-    compatible = "nordic,nrf-spim";
     pinctrl-0 = <&spi0_left_default>;
     pinctrl-1 = <&spi0_left_sleep>;
     pinctrl-names = "default", "sleep";
 
-    /* CS = P0.09 (Active Low) */
-    cs-gpios = <&gpio0 9 GPIO_ACTIVE_LOW>;
-
     pmw3610_b_left: pmw3610@0 {
-        status = "okay";
-        compatible = "zmk,encoder-pmw3610-b";
+        compatible = "zmk,encoder-pmw3610-b";  /* 左はスクロール出力 */
         label = "LEFT_TB";
         reg = <0>;
         spi-max-frequency = <2000000>;
-
-        /* MOTION/IRQ = P0.02（Active Low + Pull-up） */
-        irq-gpios = <&gpio0 2 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
-
-        /* スクロール方向の調整（必要に応じて） */
-        // x-invert;
+        cs-gpios  = <&gpio0 9 GPIO_ACTIVE_LOW>;    /* CS=P0.09 */
+        irq-gpios = <&gpio0 2 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>; /* MOTION=P0.02 */
+        // x-invert;  // 必要に応じて
         // y-invert;
         // swap-xy;
     };
