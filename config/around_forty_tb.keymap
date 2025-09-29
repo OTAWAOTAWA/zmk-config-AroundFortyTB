@@ -11,8 +11,8 @@
 
         BASE {
             bindings = <
-&kp Q         &kp W   &trans  &trans  &trans          &trans  &trans  &trans  &trans  &trans
-&kp A         &kp S   &kp D   &trans  &trans          &trans  &trans  &trans  &trans  &trans
+&kp Q         &kp W   &kp E   &kp R   &kp T           &trans  &trans  &trans  &trans  &trans
+&kp A         &kp S   &kp D   &kp F   &kp G           &trans  &trans  &trans  &trans  &trans
 &mt LSHIFT Z  &kp X   &kp C   &kp V   &kp B   &trans  &trans  &trans  &trans  &none   &trans  &trans
 &trans        &trans  &trans  &none   &trans  &trans  &trans                          &none
             >;
