@@ -1,7 +1,6 @@
 #include "around_forty_tb.dtsi"
 #include <zephyr/dt-bindings/pinctrl/nrf-pinctrl.h>
 
-/* SPI0 用 pinctrl（配線に合わせて） */
 &pinctrl {
     spi0_default: spi0_default {
         group1 {
@@ -26,17 +25,7 @@
         spi-max-frequency = <2000000>;
         cs-gpios  = <&gpio0 5 GPIO_ACTIVE_LOW>;
         mot-gpios = <&gpio0 4 GPIO_ACTIVE_LOW>;
-        /* 必要なら向き補正:
-         *   swap-xy;
-         *   invert-x;
-         *   invert-y;
-         */
     };
 };
 
-/* 右はスクロール・リスナーを持たない（何も追加しない） */
-/* chosen に右TBを割り当てたい場合は以下を任意で：
- / {
-     chosen { zmk,pointing_device = &pmw3610_b_right; };
- };
-*/
+/* aliases ブロックは不要。何も追加しない */
