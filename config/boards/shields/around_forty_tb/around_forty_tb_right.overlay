@@ -1,18 +1,11 @@
-#include "around_forty_tb.dtsi"
+/* seeeduino_xiao_ble + PMW3610 (RIGHT / pointer move) */
 
-/* 右手は 5 列ぶん右へ寄せる */
-&default_transform {
-    col-offset = <5>;
-};
-
-/* 実機で動作した SPI/TB 配線（そのまま踏襲） */
-&xiao_serial { status = "disabled"; };
-
+/* SPI ピン定義（3-wire: SCK=P0.05, SDIO/MOSI=P0.04） */
 &pinctrl {
     spi0_right_default: spi0_right_default {
         group1 {
-            psels = <NRF_PSEL(SPIM_SCK,  0, 5)>,   /* SCLK=P0.05 */
-                    <NRF_PSEL(SPIM_MOSI, 0, 4)>;   /* SDIO=P0.04 (3-wire) */
+            psels = <NRF_PSEL(SPIM_SCK,  0, 5)>,
+                    <NRF_PSEL(SPIM_MOSI, 0, 4)>;
         };
     };
     spi0_right_sleep: spi0_right_sleep {
@@ -31,16 +24,26 @@
     pinctrl-names = "default", "sleep";
 
     trackball_r: pmw3610@0 {
-        compatible = "zmk,pmw3610-b";      /* ドライバの compatible 名に合わせる */
+        /* ★ ドライバの bindings に合わせて compatible を調整してください。
+           そのままでも多くの環境で 'pixart,pmw3610' が受け付けられます。 */
+        compatible = "pixart,pmw3610";
         reg = <0>;
         spi-max-frequency = <2000000>;
-        cs-gpios  = <&gpio0 9 GPIO_ACTIVE_LOW>;    /* CS=P0.09 */
-        irq-gpios = <&gpio0 2 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>; /* MOTION=P0.02 */
+
+        /* CS = P0.09（NFC1）。別ピンなら 9 を該当番号に変更 */
+        cs-gpios  = <&gpio0 9 GPIO_ACTIVE_LOW>;
+
+        /* MOTION 割り込み = P0.02（プルアップ推奨） */
+        irq-gpios = <&gpio0 2 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
+
+        /* 感度（必要に応じて調整） */
         cpi = <1200>;
-        /* three-wire;  // 3線式が必要ならドライバのREADME通りに */
+
+        /* three-wire;  // ドライバで 3-wire 指定が必要ならコメント解除 */
     };
 };
 
+/* 右手＝ポインティングデバイスはこのセンサー */
  /{
     chosen {
         zmk,pointing-device = &trackball_r;
