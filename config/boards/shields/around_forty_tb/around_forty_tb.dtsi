@@ -1,19 +1,9 @@
-/* config/boards/shields/around_forty_tb/around_forty_tb.dtsi */
-/* Matrix: 4 rows x 10 cols (左右合算). Diode: col2row.
- * Cols = D10, D9, D8, D7, P0.10
- * Rows = D1, D2, D3, D6
- * NFC を GPIO 化する場合は .conf に:
- *   CONFIG_NFCT_PINS_AS_GPIOS=y
- */
-
-#include <dt-bindings/zmk/matrix_transform.h>
-
- / {
-    default_transform: keymap_transform_0 {
+/ {
+    /* 物理→論理の変換（数値のみ） */
+    default: keymap_transform_0 {
         compatible = "zmk,matrix-transform";
         rows = <4>;
         columns = <10>;
-        col-offset = <0>;
         map = <
             0  1  2  3  4   5  6  7  8  9
             10 11 12 13 14  15 16 17 18 19
@@ -22,32 +12,36 @@
         >;
     };
 
-    /* このシールドで使う KSCAN を指名 */
-    chosen { zmk,kscan = &kscan0; };
+    chosen {
+        /* これで zmk_matrix_transform_default が生成される */
+        zmk,matrix-transform = &default;
+        /* 走査対象の KSCAN をこのシールドで定義している旨も明示 */
+        zmk,kscan = &kscan0;
+    };
+};
 
-    /* ---- キーマトリクス (col2row) ---- */
-    kscan0: kscan_0 {
+/* 行列スキャン定義。Row/Col はご提示回路に合わせています */
+&gpio0 { status = "okay"; };
+&gpio1 { status = "okay"; };
+
+/ {
+    kscan0: kscan {
         compatible = "zmk,kscan-gpio-matrix";
-        label = "KSCAN";
         diode-direction = "col2row";
 
-        /* Rows（入力 / PULL_DOWN あり）
-         * D1=P0.02, D2=P0.03, D3=P0.28, D6=P1.11
-         */
-        row-gpios =
-            <&xiao_d 1 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>,
-            <&xiao_d 2 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>,
-            <&xiao_d 3 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>,
-            <&xiao_d 6 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>;
+        /* Row: P0.03 / P0.28 / P0.29 / P1.11 */
+        row-gpios = <&gpio0 3 GPIO_ACTIVE_HIGH>,
+                    <&gpio0 28 GPIO_ACTIVE_HIGH>,
+                    <&gpio0 29 GPIO_ACTIVE_HIGH>,
+                    <&gpio1 11 GPIO_ACTIVE_HIGH>;
 
-        /* Cols（出力 / プルなし）
-         * D10=P1.15, D9=P1.14, D8=P1.13, D7=P1.12, 追加: P0.10
-         */
-        col-gpios =
-            <&xiao_d 10 GPIO_ACTIVE_HIGH>,
-            <&xiao_d 9  GPIO_ACTIVE_HIGH>,
-            <&xiao_d 8  GPIO_ACTIVE_HIGH>,
-            <&xiao_d 7  GPIO_ACTIVE_HIGH>,
-            <&gpio0 10  GPIO_ACTIVE_HIGH>;
+        /* Col: P1.15 / P1.14 / P1.13 / P1.12 / P1.10 */
+        col-gpios = <&gpio1 15 GPIO_ACTIVE_HIGH>,
+                    <&gpio1 14 GPIO_ACTIVE_HIGH>,
+                    <&gpio1 13 GPIO_ACTIVE_HIGH>,
+                    <&gpio1 12 GPIO_ACTIVE_HIGH>,
+                    <&gpio1 10 GPIO_ACTIVE_HIGH>;
+
+        debounce-period = <5>;
     };
 };
