@@ -1,9 +1,6 @@
-/* 共通キーマトリクス定義（col2row）
- */
 #include <dt-bindings/zmk/matrix_transform.h>
 
 / {
-    /* --- 40キー用の共通トランスフォーム --- */
     default_transform: keymap_transform_0 {
         compatible = "zmk,matrix-transform";
         rows = <4>;
@@ -18,30 +15,21 @@
         )>;
     };
 
-    /* --- このシールドで使う KSCAN を指名 --- */
     chosen {
         zmk,kscan = &kscan0;
     };
 
-    /* --- キーマトリクス (col2row) --- */
     kscan0: kscan_0 {
         compatible = "zmk,kscan-gpio-matrix";
         label = "KSCAN";
         diode-direction = "col2row";
 
-        /*
-         * Rows（入力 / PULL_DOWN あり）
-         * Row0: P0.03 (D1), Row1: P0.28 (D2), Row2: P0.29 (D3), Row3: P1.11 (D6)
-         */
         row-gpios =
             <&xiao_d  1 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>,
             <&xiao_d  2 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>,
             <&xiao_d  3 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>,
             <&xiao_d  6 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>;
 
-        /* Cols（出力 / プルなし）
-         * D10=P1.15, D9=P1.14, D8=P1.13, D7=P1.12, 追加: P0.10
-         */
         col-gpios =
             <&xiao_d 10 GPIO_ACTIVE_HIGH>,
             <&xiao_d  9 GPIO_ACTIVE_HIGH>,
