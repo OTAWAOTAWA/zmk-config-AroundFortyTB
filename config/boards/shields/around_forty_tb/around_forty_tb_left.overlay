@@ -1,26 +1,10 @@
-/* Left half (peripheral) — PMW3610 = encoder (スクロール用)
- * 配線: SCK=P0.05, MOSI=P0.04, MISO=P1.14, CS=P0.09, MOTION/IRQ=P0.02
- * キーマトリクス/transform は共通 dtsi に定義。
- */
+/* seeeduino_xiao_ble + PMW3610 (LEFT / (later) scroll) */
 
-#include "around_forty_tb.dtsi"
-
-/* 左手はオフセット無し（右手は 5 を指定） */
-&default_transform {
-    col-offset = <0>;
-};
-
-/* 必要なら UART を無効化（任意） */
-&xiao_serial { status = "disabled"; };
-
-/* ---- SPI pinctrl（左） ----
- * ★右 overlay とラベルが重複しないよう _left を付与
- */
 &pinctrl {
     spi0_left_default: spi0_left_default {
         group1 {
-            psels = <NRF_PSEL(SPIM_SCK,  0, 5)>,  /* P0.05 */
-                    <NRF_PSEL(SPIM_MOSI, 0, 4)>;  /* P0.04 (SDIO) */
+            psels = <NRF_PSEL(SPIM_SCK,  0, 5)>,
+                    <NRF_PSEL(SPIM_MOSI, 0, 4)>;
         };
     };
     spi0_left_sleep: spi0_left_sleep {
@@ -38,15 +22,28 @@
     pinctrl-1 = <&spi0_left_sleep>;
     pinctrl-names = "default", "sleep";
 
-    pmw3610_b_left: pmw3610@0 {
-        compatible = "zmk,encoder-pmw3610-b";  /* 左はスクロール出力 */
-        label = "LEFT_TB";
+    trackball_l: pmw3610@0 {
+        compatible = "pixart,pmw3610";
         reg = <0>;
         spi-max-frequency = <2000000>;
-        cs-gpios  = <&gpio0 9 GPIO_ACTIVE_LOW>;    /* CS=P0.09 */
-        irq-gpios = <&gpio0 2 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>; /* MOTION=P0.02 */
-        // x-invert;  // 必要に応じて
-        // y-invert;
-        // swap-xy;
+
+        /* CS = P0.09（左右同配線ならそのまま）。別ピンなら変更 */
+        cs-gpios  = <&gpio0 9 GPIO_ACTIVE_LOW>;
+        irq-gpios = <&gpio0 2 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
+
+        /* 左は低めの CPI で扱いやすく */
+        cpi = <600>;
+
+        /* 必要に応じて軸補正（例：swap-xy; x-invert; y-invert;） */
+        /* swap-xy; */
+        /* x-invert; */
+        /* y-invert; */
+    };
+};
+
+ /{
+    chosen {
+        /* 左手＝（当面）通常ポインタ。後でスクロール変換に置き換え可能 */
+        zmk,pointing-device = &trackball_l;
     };
 };
