@@ -1,10 +1,4 @@
 /* 共通キーマトリクス定義（col2row）
- * Cols: D10, D9, D8, D7, P0.10
- * Rows: D1, D2, D3, D6  （入力は PULL_DOWN）
- *
- * ※ P0.10 を GPIO として使う場合は .conf に
- * CONFIG_NFCT_PINS_AS_GPIOS=y
- * を入れてください。
  */
 #include <dt-bindings/zmk/matrix_transform.h>
 
@@ -16,10 +10,6 @@
         columns = <10>;
         col-offset = <0>;
 
-        /*
-         * 左上→右下の行優先で 40 キーを並べる
-         * (マクロ内はコメントを削除)
-         */
         map = <MATRIX_TRANSFORM_ROW_MAJOR(
              0,  1,  2,  3,  4,   5,  6,  7,  8,  9,
             10, 11, 12, 13, 14,  15, 16, 17, 18, 19,
