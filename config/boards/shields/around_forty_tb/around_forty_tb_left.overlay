@@ -1,53 +1,11 @@
-/* seeeduino_xiao_ble + PMW3610 (LEFT / scroll) */
-#include "around_forty_tb.dtsi"   /* ★ dtsi を必ず取り込む */
+#include "AroundForty-RB.dtsi"
 
-&pinctrl {
-    spi0_left_default: spi0_left_default {
-        group1 {
-            psels = <NRF_PSEL(SPIM_SCK,  0, 5)>,
-                    <NRF_PSEL(SPIM_MOSI, 0, 4)>;
-        };
-    };
-    spi0_left_sleep: spi0_left_sleep {
-        group1 {
-            psels = <NRF_PSEL(SPIM_SCK,  0, 5)>,
-                    <NRF_PSEL(SPIM_MOSI, 0, 4)>;
-            low-power-enable;
-        };
-    };
-};
-
-&spi0 {
-    status = "okay";
-    pinctrl-0 = <&spi0_left_default>;
-    pinctrl-1 = <&spi0_left_sleep>;
-    pinctrl-names = "default", "sleep";
-
-    cs-gpios = <&gpio0 9 GPIO_ACTIVE_LOW>;   /* 実配線に合わせて変更 */
-
-    trackball_l: pmw3610@0 {
-        compatible = "pixart,pmw3610";
-        status = "okay";
-        reg = <0>;
-        spi-max-frequency = <2000000>;
-
-        irq-gpios = <&gpio0 2 GPIO_ACTIVE_LOW>;
-        cpi = <600>;  /* スクロール用に低め */
-
-        /* 数値直書き: EV_REL=2, 水平=REL_HWHEEL=6, 垂直=REL_WHEEL=8 */
-        evt-type     = <2>;
-        x-input-code = <6>;
-        y-input-code = <8>;
-
-        /* 必要なら反転 */
-        /* invert-x; */
-        /* invert-y; */
-        /* swap-xy;  */
-    };
-};
-
- /{
-    chosen {
-        zmk,pointing-device = &trackball_l;
-    };
+&kscan0 {
+        col-gpios
+            = <&xiao_d 10 GPIO_ACTIVE_HIGH>
+            , <&xiao_d 9 GPIO_ACTIVE_HIGH> 
+            , <&xiao_d 8 GPIO_ACTIVE_HIGH> 
+            , <&xiao_d 7 GPIO_ACTIVE_HIGH> 
+            , <&gpio0 10 GPIO_ACTIVE_HIGH>
+            ;
 };
