@@ -11,7 +11,7 @@
     /* 左手トラックボールのREL_X/REL_Yをスクロールに変換 */
     scroll_listener_left: scroll_listener_left {
         compatible = "zmk,input-listener";
-        device = <&pmw3610_b_left>;
+        device = <&tb_scroll_source>;
         status = "okay";
 
         /* 各エントリは <> で囲み、カンマで区切る */
