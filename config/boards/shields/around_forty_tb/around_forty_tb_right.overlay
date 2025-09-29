@@ -1,58 +1,50 @@
-/* config/boards/shields/around_forty_tb/around_forty_tb.dtsi
- *
- * 共通キーマトリクス定義（col2row）
- * Cols: D10, D9, D8, D7, P0.10
- * Rows: D1, D2, D3, D6  （入力は PULL_DOWN）
- *
- * ※ P0.10 を GPIO として使うため、.conf に
- *    CONFIG_NFCT_PINS_AS_GPIOS=y
- *    を入れてください。
- */
+#include "around_forty_tb.dtsi"
 
-#include <dt-bindings/zmk/matrix_transform.h>
+/* 右手は 5 列ぶん右へ寄せる */
+&default_transform {
+    col-offset = <5>;
+};
 
- / {
-    /* 左右 overlay から col-offset を上書きできるように用意 */
-    default_transform: keymap_transform_0 {
-        compatible = "zmk,matrix-transform";
-        rows = <4>;      /* 行数 */
-        columns = <5>;   /* 片手の列数 */
-        /* col-offset は各 overlay 側（left/right）で設定します */
+/* 実機で動作した SPI/TB 配線（そのまま踏襲） */
+&xiao_serial { status = "disabled"; };
+
+&pinctrl {
+    spi0_default: spi0_default {
+        group1 {
+            psels = <NRF_PSEL(SPIM_SCK,  0, 5)>,
+                    <NRF_PSEL(SPIM_MOSI, 0, 4)>,
+                    <NRF_PSEL(SPIM_MISO, 0, 4)>;
+        };
     };
-
-    /* このシールドで使う KSCAN を指名 */
-    chosen {
-        zmk,kscan = &kscan0;
-    };
-
-    /* ---- キーマトリクス ---- */
-    kscan0: kscan_0 {
-        compatible = "zmk,kscan-gpio-matrix";
-        label = "KSCAN";
-        diode-direction = "col2row";
-
-        /* Rows（入力 / PULL_DOWN あり）
-         * D1=P0.02, D2=P0.03, D3=P0.28, D6=P1.11
-         */
-        row-gpios =
-            <&xiao_d  1 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>,
-            <&xiao_d  2 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>,
-            <&xiao_d  3 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>,
-            <&xiao_d  6 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>;
-
-        /* Cols（出力 / プルなし）
-         * D10=P1.15, D9=P1.14, D8=P1.13, D7=P1.12, 追加: P0.10
-         */
-        col-gpios =
-            <&xiao_d 10 GPIO_ACTIVE_HIGH>,
-            <&xiao_d  9 GPIO_ACTIVE_HIGH>,
-            <&xiao_d  8 GPIO_ACTIVE_HIGH>,
-            <&xiao_d  7 GPIO_ACTIVE_HIGH>,
-            <&gpio0  10 GPIO_ACTIVE_HIGH>;
-
-        /* 必要に応じてデバウンスを有効化
-         * debounce-press-ms = <5>;
-         * debounce-release-ms = <5>;
-         */
+    spi0_sleep: spi0_sleep {
+        group1 {
+            psels = <NRF_PSEL(SPIM_SCK,  0, 5)>,
+                    <NRF_PSEL(SPIM_MOSI, 0, 4)>,
+                    <NRF_PSEL(SPIM_MISO, 0, 4)>;
+            low-power-enable;
+        };
     };
 };
+
+&spi0 {
+    status = "okay";
+    compatible = "nordic,nrf-spim";
+    pinctrl-0 = <&spi0_default>;
+    pinctrl-1 = <&spi0_sleep>;
+    pinctrl-names = "default", "sleep";
+    cs-gpios = <&gpio0 9 GPIO_ACTIVE_LOW>;  /* CS=P0.09 */
+
+    trackball_r: trackball@0 {
+        status = "okay";
+        compatible = "pixart,pmw3610";
+        reg = <0>;
+        spi-max-frequency = <2000000>;
+        irq-gpios = <&gpio0 2 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>; /* MOT/IRQ=P0.02 */
+    };
+}
+
+/* 必要なら右手をポインティングデバイスに指定
+/ {
+    chosen { zmk,pointing_device = &trackball_r; };
+};
+*/
