@@ -3,18 +3,18 @@
  * Rows: D1, D2, D3, D6  （入力は PULL_DOWN）
  *
  * ※ P0.10 を GPIO として使う場合は .conf に
- *    CONFIG_NFCT_PINS_AS_GPIOS=y
- *    を入れてください。
+ * CONFIG_NFCT_PINS_AS_GPIOS=y
+ * を入れてください。
  */
 #include <dt-bindings/zmk/matrix_transform.h>
 
- / {
+/ {
     /* --- 40キー用の共通トランスフォーム --- */
     default_transform: keymap_transform_0 {
         compatible = "zmk,matrix-transform";
         rows = <4>;
-        columns = <10>;           /* 全体：10列（左右 5+5） */
-        col-offset = <0>;         /* overlay（left/right）で上書き */
+        columns = <10>;         /* 全体：10列（左右 5+5） */
+        col-offset = <0>;       /* overlay（left/right）で上書き */
 
         /* 左上→右下の行優先で 40 キーを並べる */
         map = <MATRIX_TRANSFORM_ROW_MAJOR(
@@ -36,8 +36,10 @@
         label = "KSCAN";
         diode-direction = "col2row";
 
-        /* Rows（入力 / PULL_DOWN あり）
-         * D1=P0.02, D2=P0.03, D3=P0.28, D6=P1.11
+        /*
+         * Rows（入力 / PULL_DOWN あり）
+         * 回路図と公式ピン配置図に基づく修正済みの定義
+         * Row0: P0.03 (D1), Row1: P0.28 (D2), Row2: P0.29 (D3), Row3: P1.11 (D6)
          */
         row-gpios =
             <&xiao_d  1 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>,
