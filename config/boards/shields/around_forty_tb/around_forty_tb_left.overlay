@@ -1,5 +1,5 @@
 /* seeeduino_xiao_ble + PMW3610 (LEFT / scroll) */
-#include <zephyr/dt-bindings/input/input-event-codes.h>
+/* こちらも数値セル指定で統一 */
 
 &pinctrl {
     spi0_left_default: spi0_left_default {
@@ -28,20 +28,23 @@
         reg = <0>;
         spi-max-frequency = <2000000>;
 
-        cs-gpios  = <&gpio0 9 GPIO_ACTIVE_LOW>;                     /* 実配線に合わせる */
-        irq-gpios = <&gpio0 2 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
+        cs-gpios  = <&gpio0 9 GPIO_ACTIVE_LOW>;   /* 実配線に合わせる */
+        irq-gpios = <&gpio0 2 GPIO_ACTIVE_LOW>;
 
-        cpi = <600>;                                                /* スクロールは低めが扱いやすい */
+        cpi = <600>;  /* スクロールは低めに */
 
-        /* イベント＝相対、X=水平スクロール、Y=垂直スクロール */
-        evt-type     = <INPUT_EV_REL>;
-        x-input-code = <INPUT_REL_HWHEEL>;                          /* ← 左右スクロール */
-        y-input-code = <INPUT_REL_WHEEL>;                           /* ← 上下スクロール */
+        /* ==== 数値で直指定 ====
+         *   EV_REL = 2, REL_HWHEEL = 6, REL_WHEEL = 8
+         *   X=水平スクロール, Y=垂直スクロール
+         */
+        evt-type     = <2>;   /* EV_REL */
+        x-input-code = <6>;   /* REL_HWHEEL */
+        y-input-code = <8>;   /* REL_WHEEL */
 
-        /* 方向が逆なら下のどれかを付ける */
-        /* invert-x; */   /* 水平スクロール方向反転 */
-        /* invert-y; */   /* 垂直スクロール方向反転 */
-        /* swap-xy; */    /* 必要なら軸入れ替え */
+        /* 方向が逆なら適宜補正（ドライバが対応していれば） */
+        /* invert-x; */
+        /* invert-y; */
+        /* swap-xy;  */
     };
 };
 
