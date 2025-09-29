@@ -39,3 +39,7 @@
     chosen { zmk,pointing_device = &pmw3610_b_right; };
     /delete-node/ scroll_listener_left;  /* 右ビルド時は左のリスナーを削除 */
 };
+
+&aliases {
+    tb_scroll_source = &pmw3610_b_left;
+};
