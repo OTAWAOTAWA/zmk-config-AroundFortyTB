@@ -8,21 +8,54 @@
 #define RAISE 2
 
 / {
+    /* 左手トラックボールのREL_X/REL_Yをスクロールに変換 */
     scroll_listener_left: scroll_listener_left {
         compatible = "zmk,input-listener";
         device = <&pmw3610_b_left>;
         status = "okay";
-        input-processors = <
-            &zip_xy_to_scroll_mapper    /* X→水平スクロール, Y→垂直スクロール */
-            &zip_xy_scaler 1 1          /* 感度（必要に応じて 2 2 / 3 3 などに） */
-            /* 方向が逆なら &zip_invert_x / &zip_invert_y、入替なら &zip_swap_xy を追加 */
-        >;
+
+        /* 各エントリは <> で囲み、カンマで区切る */
+        /* X→水平スクロール, Y→垂直スクロール / 感度は 1x1（必要に応じて 2 2 / 3 3 などに） */
+        input-processors = <&zip_xy_to_scroll_mapper>, <&zip_xy_scaler 1 1>;
+        /* 方向が逆なら以下を追加（例）：
+         * input-processors = <&zip_xy_to_scroll_mapper>, <&zip_xy_scaler 1 1>, <&zip_invert_x>;
+         * input-processors = <&zip_xy_to_scroll_mapper>, <&zip_xy_scaler 1 1>, <&zip_invert_y>;
+         * X/Y 入替えたい場合：
+         * input-processors = <&zip_xy_to_scroll_mapper>, <&zip_xy_scaler 1 1>, <&zip_swap_xy>;
+         */
     };
 
     keymap {
         compatible = "zmk,keymap";
-        BASE { bindings = < /* 省略（前回貼ったものでOK） */ >; }
-        LOWER{ bindings = < /* 〃 */ >; }
-        RAISE{ bindings = < /* 〃 */ >; }
+
+        /* 以下の bindings の個数/配置はあなたのマトリクスに合わせてあります。
+           必要なら &trans / &none の位置を入れ替えてください。 */
+
+        BASE {
+            bindings = <
+            &trans &trans &trans &trans &trans &trans      &trans &trans &trans &trans &trans &trans
+            &trans &trans &trans &trans &trans &trans      &trans &trans &trans &trans &trans &trans
+            &trans &trans &trans &trans &trans &none       &trans &trans &trans &trans &trans &none
+            &trans &trans &trans &none  &none  &none       &trans &trans &trans &none  &none  &none
+            >;
+        };
+
+        LOWER {
+            bindings = <
+            &trans &trans &trans &trans &trans &trans      &trans &trans &trans &trans &trans &trans
+            &trans &trans &trans &trans &trans &trans      &trans &trans &trans &trans &trans &trans
+            &trans &trans &trans &trans &trans &none       &trans &trans &trans &trans &trans &none
+            &trans &trans &trans &none  &none  &none       &trans &trans &trans &none  &none  &none
+            >;
+        };
+
+        RAISE {
+            bindings = <
+            &trans &trans &trans &trans &trans &trans      &trans &trans &trans &trans &trans &trans
+            &trans &trans &trans &trans &trans &trans      &trans &trans &trans &trans &trans &trans
+            &trans &trans &trans &trans &trans &none       &trans &trans &trans &trans &trans &none
+            &trans &trans &trans &none  &none  &none       &trans &trans &trans &none  &none  &none
+            >;
+        };
     };
 };
