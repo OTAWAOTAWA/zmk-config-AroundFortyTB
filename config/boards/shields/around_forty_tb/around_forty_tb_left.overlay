@@ -34,6 +34,8 @@
         /* 左は低めの CPI で扱いやすく */
         cpi = <600>;
 
+        evt-type = "pointer";
+
         /* 必要に応じて軸補正（例：swap-xy; x-invert; y-invert;） */
         /* swap-xy; */
         /* x-invert; */
