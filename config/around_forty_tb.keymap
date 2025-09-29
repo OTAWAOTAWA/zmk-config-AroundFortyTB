@@ -2,25 +2,29 @@
 #include <dt-bindings/zmk/keys.h>
 #include <dt-bindings/zmk/pointing.h>
 
-#define BASE 0
+/* レイヤー名（必要に応じて調整） */
+#define BASE  0
 #define LOWER 1
 #define RAISE 2
 
 / {
-    // 左手側PMW3610をスクロール用センサーとして利用
+    /* 左手PMW3610を回転スクロール用センサーとして使う想定
+     * 右手ビルド時は overlay 側でこのノードを /delete-node/ します。
+     */
     keymap_sensors: sensors {
         compatible = "zmk,keymap-sensors";
-        sensors = <&pmw3610_b_left>;
-        triggers-per-rotation = <20>;
-        bindings = <&scroll_behavior>;
+        sensors = <&pmw3610_b_left>;     /* ← 左手側に定義されているPMW3610のラベル */
+        triggers-per-rotation = <20>;    /* スクロール感度。必要に応じて調整 */
+        bindings = <&scroll_behavior>;   /* 下の behaviors で定義 */
     };
 
     behaviors {
+        /* 回転センサー用ビヘイビア：CW/CCWの2エントリのみ */
         scroll_behavior: scroll_behavior {
             compatible = "zmk,behavior-sensor-rotate";
             label = "SCROLL_BEHAVIOR";
             #sensor-binding-cells = <0>;
-            bindings = <&msc SCRL_UP>, <&msc SCRL_DOWN>;
+            bindings = <&msc SCRL_UP>, <&msc SCRL_DOWN>;  /* CW / CCW */
             tap-ms = <20>;
         };
     };
@@ -30,28 +34,28 @@
 
         BASE {
             bindings = <
-            &trans &trans &trans &trans &trans &trans    &trans &trans &trans &trans &trans &trans
-            &trans &trans &trans &trans &trans &trans    &trans &trans &trans &trans &trans &trans
-            &trans &trans &trans &trans &trans &none     &trans &trans &trans &trans &trans &none
-            &trans &trans &trans &none &none &none       &trans &trans &trans &none &none &none
+            &trans &trans &trans &trans &trans &trans      &trans &trans &trans &trans &trans &trans
+            &trans &trans &trans &trans &trans &trans      &trans &trans &trans &trans &trans &trans
+            &trans &trans &trans &trans &trans &none       &trans &trans &trans &trans &trans &none
+            &trans &trans &trans &none  &none  &none       &trans &trans &trans &none  &none  &none
             >;
         };
 
         LOWER {
             bindings = <
-            &trans &trans &trans &trans &trans &trans    &trans &trans &trans &trans &trans &trans
-            &trans &trans &trans &trans &trans &trans    &trans &trans &trans &trans &trans &trans
-            &trans &trans &trans &trans &trans &none     &trans &trans &trans &trans &trans &none
-            &trans &trans &trans &none &none &none       &trans &trans &trans &none &none &none
+            &trans &trans &trans &trans &trans &trans      &trans &trans &trans &trans &trans &trans
+            &trans &trans &trans &trans &trans &trans      &trans &trans &trans &trans &trans &trans
+            &trans &trans &trans &trans &trans &none       &trans &trans &trans &trans &trans &none
+            &trans &trans &trans &none  &none  &none       &trans &trans &trans &none  &none  &none
             >;
         };
 
         RAISE {
             bindings = <
-            &trans &trans &trans &trans &trans &trans    &trans &trans &trans &trans &trans &trans
-            &trans &trans &trans &trans &trans &trans    &trans &trans &trans &trans &trans &trans
-            &trans &trans &trans &trans &trans &none     &trans &trans &trans &trans &trans &none
-            &trans &trans &trans &none &none &none       &trans &trans &trans &none &none &none
+            &trans &trans &trans &trans &trans &trans      &trans &trans &trans &trans &trans &trans
+            &trans &trans &trans &trans &trans &trans      &trans &trans &trans &trans &trans &trans
+            &trans &trans &trans &trans &trans &none       &trans &trans &trans &trans &trans &none
+            &trans &trans &trans &none  &none  &none       &trans &trans &trans &none  &none  &none
             >;
         };
     };
