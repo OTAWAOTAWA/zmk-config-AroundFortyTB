@@ -1,26 +1,37 @@
 #include "around_forty_tb.dtsi"
 
-/* 右/左 overlay の先頭付近（/ の直下でOK）に追加 */
+/* 1) SPI0 用の pinctrl を自前定義（SCK=P0.13, MOSI=P0.17, MISO=P0.15）
+ *   ※配線が違う場合は数字を修正してください。
+ */
 &pinctrl {
     spi0_default: spi0_default {
         group1 {
-            /* SPI0 の SCK/MOSI/MISO を P0.13 / P0.17 / P0.15 に割り当て */
             psels = <NRF_SPI_SCK(0,13) NRF_SPI_MOSI(0,17) NRF_SPI_MISO(0,15)>;
         };
     };
 };
 
-
+/* 2) 既存の spi0 を有効化し、pinctrl を紐付け。PMW3610 を子ノードとしてぶら下げる。 */
 &spi0 {
     status = "okay";
+    pinctrl-0 = <&spi0_default>;
+    pinctrl-names = "default";
 
+    /* 左手トラックボール本体（相対移動デバイスとして定義） */
     pmw3610_b_left: pmw3610@0 {
         compatible = "zmk,pointing-device-pmw3610-b";
         label = "LEFT_TB";
-        reg = <0>;
-        spi-max-frequency = <2000000>;
-        cs-gpios = <&gpio0 5 GPIO_ACTIVE_LOW>;
+        reg = <0>;                      /* CS#0 を使用 */
+        spi-max-frequency = <2000000>;  /* 必要に応じて調整 */
+
+        /* CS と MOT の GPIO（配線に合わせて修正可） */
+        cs-gpios  = <&gpio0 5 GPIO_ACTIVE_LOW>;
         mot-gpios = <&gpio0 4 GPIO_ACTIVE_LOW>;
-        // 必要なら: swap-xy; invert-x; invert-y;
+
+        /* 方向が合わなければ以下を必要に応じて有効化
+           swap-xy;
+           invert-x;
+           invert-y;
+        */
     };
 };
