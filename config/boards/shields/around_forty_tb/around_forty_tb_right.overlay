@@ -1,5 +1,16 @@
 #include "around_forty_tb.dtsi"
 
+/* 右/左 overlay の先頭付近（/ の直下でOK）に追加 */
+&pinctrl {
+    spi0_default: spi0_default {
+        group1 {
+            /* SPI0 の SCK/MOSI/MISO を P0.13 / P0.17 / P0.15 に割り当て */
+            psels = <NRF_SPI_SCK(0,13) NRF_SPI_MOSI(0,17) NRF_SPI_MISO(0,15)>;
+        };
+    };
+};
+
+
 /* 既存の pinctrl を壊さず有効化だけする */
 &spi0 {
     status = "okay";
