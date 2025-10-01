@@ -1,8 +1,5 @@
-# config/boards/shields/around_forty_tb/Kconfig.defconfig
-
 if SHIELD_AROUND_FORTY_TB_R
 config ZMK_KEYBOARD_NAME
-    string
     default "AroundForty-TB_R"
 
 config ZMK_SPLIT
@@ -17,15 +14,9 @@ endif
 
 if SHIELD_AROUND_FORTY_TB_L
 config ZMK_KEYBOARD_NAME
-    string
     default "AroundForty-TB_L"
 
 config ZMK_SPLIT
     def_bool y
 
-config ZMK_SPLIT_BLE
-    def_bool y
-
-config ZMK_SPLIT_ROLE_PERIPHERAL
-    def_bool y
 endif
