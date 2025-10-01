@@ -70,3 +70,11 @@
 
 };
 };
+
+/* ← 共有dtsiで作ったsplitノードに、この左センサーを登録する */
+&tb_left_split {
+    device = <&trackball_l>;
+
+    /* Peripheral→Central へ送る前に補正が必要ならここで可能（任意） */
+    // input-processors = <&zip_xy_swap_mapper>;
+};
