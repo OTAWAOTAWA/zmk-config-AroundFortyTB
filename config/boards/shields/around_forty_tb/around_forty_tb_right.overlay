@@ -1,4 +1,5 @@
 #include "AroundForty-TB.dtsi"
+#include <input/processors.dtsi>
 #include <zephyr/dt-bindings/input/input-event-codes.h>
 
 &default_transform {
@@ -65,6 +66,16 @@
         y-input-code = <INPUT_REL_Y>;
         cpi = <800>;
 
+/* 共有dtsi内のリスナーをCentralで有効化し、XY→スクロールを割り当て */
+&tb_left_listener {
+    status = "okay";
+    device = <&tb_left_split>;             /* 念のため明示 */
+    input-processors = <&zip_xy_to_scroll_mapper>;
+    /* 速度調整したいとき（例：1.5倍） */
+    // input-processors = <&zip_xy_to_scroll_mapper &zip_xy_scaler 3 2>;
+    /* 方向が逆ならトランスフォーム */
+    // input-processors = <&zip_xy_to_scroll_mapper &zip_transform (INPUT_TRANSFORM_Y_INVERT)>;
+};
 
 
     };
