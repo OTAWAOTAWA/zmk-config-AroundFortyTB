@@ -35,38 +35,33 @@
     };
 };
 
-&xiao_serial { status = "disabled"; };
+&trackball_listener_L {
+    status = "okay";
+};
 
+&trackball_listener_R {
+    status = "okay";
+    device = <&trackball_R>;
+};
 
 &spi0 {
     status = "okay";
-    compatible = "nordic,nrf-spim";
+    cs-gpios = <&gpio0 9 GPIO_ACTIVE_LOW>;
     pinctrl-0 = <&spi0_default>;
     pinctrl-1 = <&spi0_sleep>;
     pinctrl-names = "default", "sleep";
-    cs-gpios = <&gpio0 9 GPIO_ACTIVE_LOW>;
+    compatible = "nordic,nrf-spim";
 
-    trackball: trackball@0 {
+    trackball_R: trackball_R@0 {
         status = "okay";
         compatible = "pixart,pmw3610";
         reg = <0>;
         spi-max-frequency = <2000000>;
-        cpi = <400>;
         irq-gpios = <&gpio0 2 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
-        // automouse-layer = <6>;
-        // swap-xy; /* optional */
-        invert-x;
-        // invert-y; /* optional */
+        cpi = <400>;
         evt-type = <INPUT_EV_REL>;
         x-input-code = <INPUT_REL_X>;
         y-input-code = <INPUT_REL_Y>;
-        force-awake; 
+        force-awake;
     };
-};
-
-/ {
-  trackball_listener {
-    compatible = "zmk,input-listener";
-    device = <&trackball>;
-  };
 };
