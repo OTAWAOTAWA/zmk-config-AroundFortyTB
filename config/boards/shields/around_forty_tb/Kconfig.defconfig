@@ -1,27 +1,22 @@
-# 右手 = Central
 if SHIELD_AROUND_FORTY_TB_RIGHT
+
 config ZMK_KEYBOARD_NAME
     string
-    default "AFTB_R"            # 長すぎ回避のため短め推奨
+    default "AroundFortyTB_R"
 
 config ZMK_SPLIT
-    def_bool y
-config ZMK_SPLIT_BLE
-    def_bool y
+    default y
+
 config ZMK_SPLIT_ROLE_CENTRAL
-    def_bool y
+    default y
+
 endif
 
-# 左手 = Peripheral
 if SHIELD_AROUND_FORTY_TB_LEFT
 config ZMK_KEYBOARD_NAME
-    string
-    default "AFTB_L"
+    default "AroundFortyTB_L"
 
 config ZMK_SPLIT
-    def_bool y
-config ZMK_SPLIT_BLE
-    def_bool y
-config ZMK_SPLIT_ROLE_PERIPHERAL
-    def_bool y
+    default y
+
 endif
