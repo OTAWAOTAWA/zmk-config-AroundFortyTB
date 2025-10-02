@@ -39,10 +39,10 @@
     pinctrl-1 = <&spi0_sleep>;
     pinctrl-names = "default", "sleep";
     cs-gpios = <&gpio0 9 GPIO_ACTIVE_LOW>;
-    trackball: trackball@0 {
+    trackball: trackball2@1 {
         status = "okay";
         compatible = "pixart,pmw3610";
-        reg = <0>;
+        reg = <1>;
         spi-max-frequency = <2000000>;
         cpi = <400>;
         irq-gpios = <&gpio0 2 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
@@ -55,8 +55,14 @@
 };
 
 / {
-  trackball_listener {
+  trackball_listener2 {
     compatible = "zmk,input-listener";
-    device = <&trackball>;
+    device = <&trackball2>;
+    // これ以降にリスナーの設定
+    // スクロールレイヤーの例
+    scroll {
+        layers = <DEFAULT>;
+        input-processors = <&zip_xy_transform (INPUT_TRANSFORM_Y_INVERT)>, <&zip_xy_transform (INPUT_TRANSFORM_X_INVERT)>, <&zip_xy_scaler 1 20>, <&zip_xy_to_scroll_mapper>;
+        process-next;
   };
 };
