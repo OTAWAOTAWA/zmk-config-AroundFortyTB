@@ -13,35 +13,27 @@
         <&xiao_d  9 GPIO_ACTIVE_LOW>,
         <&xiao_d  8 GPIO_ACTIVE_LOW>,
         <&xiao_d  7 GPIO_ACTIVE_LOW>,
-        <&xiao_d  6 GPIO_ACTIVE_LOW>;  // ← 後述の混在回避の例
+        <&xiao_d  6 GPIO_ACTIVE_LOW>;
 
-    diode-direction = "col2row";  // 反応なければ "row2col"
+    diode-direction = "col2row";
     debounce-press-ms = <3>;
     debounce-release-ms = <5>;
-};
-
-
-/ {
-    trackball_listener {
-        compatible = "zmk,input-listener";
-        device = <&trackball>;
-    };
 };
 
 &pinctrl {
     spi0_default: spi0_default {
         group1 {
             psels = <NRF_PSEL(SPIM_SCK, 0, 5)>,
-                <NRF_PSEL(SPIM_MOSI, 0, 4)>,
-                <NRF_PSEL(SPIM_MISO, 0, 4)>;
+                    <NRF_PSEL(SPIM_MOSI, 0, 4)>,
+                    <NRF_PSEL(SPIM_MISO, 0, 4)>;
         };
     };
 
     spi0_sleep: spi0_sleep {
         group1 {
             psels = <NRF_PSEL(SPIM_SCK, 0, 5)>,
-                <NRF_PSEL(SPIM_MOSI, 0, 4)>,
-                <NRF_PSEL(SPIM_MISO, 0, 4)>;
+                    <NRF_PSEL(SPIM_MOSI, 0, 4)>,
+                    <NRF_PSEL(SPIM_MISO, 0, 4)>;
             low-power-enable;
         };
     };
@@ -55,26 +47,33 @@
     pinctrl-names = "default", "sleep";
     cs-gpios = <&gpio0 9 GPIO_ACTIVE_LOW>;
 
+    /* トラックボールの定義 */
     trackball: trackball@0 {
-    status = "okay";
-    compatible = "pixart,pmw3610";
-    reg = <0>;
-    spi-max-frequency = <2000000>;
-    irq-gpios = <&gpio0 2 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;    // optional: swap-xy; invert-x; invert-y;
-        evt-type = <INPUT_EV_REL>;
-        // optional: swap-xy; invert-x; invert-y;
-        x-input-code = <INPUT_REL_WHEEL>;
-        y-input-code = <INPUT_REL_HWHEEL>;
+        status = "okay";
+        compatible = "pixart,pmw3610";
+        reg = <0>;
+        spi-max-frequency = <2000000>;
+        irq-gpios = <&gpio0 2 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
         cpi = <600>;
-
-
+        evt-type = <INPUT_EV_REL>;
+        /* Y軸(上下)の動きを垂直スクロールに */
+        y-input-code = <INPUT_REL_WHEEL>;
+        /* X軸(左右)の動きを水平スクロールに */
+        x-input-code = <INPUT_REL_HWHEEL>;
+    };
 };
+
+/ {
+    /* trackballを監視するリスナー */
+    trackball_listener {
+        compatible = "zmk,input-listener";
+        device = <&trackball>;
+    };
 };
 
-/* ← 共有dtsiで作ったsplitノードに、この左センサーを登録する */
+
+/* 共有dtsiで作ったsplitノードに、この左センサーを登録する */
 &tb_left_split {
-    device = <&trackball_l>;
-
-    /* Peripheral→Central へ送る前に補正が必要ならここで可能（任意） */
-    // input-processors = <&zip_xy_swap_mapper>;
+    /* ★修正点: 上で定義した "trackball" を正しく参照するように変更 */
+    device = <&trackball>;
 };
