@@ -1,4 +1,5 @@
 #include "around_forty_tb.dtsi"
+#include <zephyr/dt-bindings/input/input-event-codes.h>
 
 &kscan0 {
         col-gpios
@@ -46,13 +47,8 @@
         cpi = <400>;
         irq-gpios = <&gpio0 2 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
         invert-x;
-        /* invert-y; */
-        evt-type = <INPUT_EV_REL>;
-        /* 縦スクロール */
-        y-input-code = <INPUT_REL_WHEEL>;
-        /* 横スクロール */
-        x-input-code = <INPUT_REL_HWHEEL>;
         force-awake;
+        zmk,scroll-mode; /* Add this line to enable scroll mode */
     };
 };
 
