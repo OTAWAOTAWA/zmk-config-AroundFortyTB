@@ -60,7 +60,7 @@
 &kp Q             &kp W         &kp E           &kp R             &kp T        &kp Y           &kp U          &kp I        &kp O        &kp P
 &kp A             &kp S         &kp D           &kp F             &kp G        &kp H           &kp J          &kp K        &kp L        &kp MINUS
 &mt LEFT_SHIFT Z  &kp X         &kp C           &kp V             &kp B        &kp N           &kp M          &kp COMMA    &kp PERIOD   &mt LEFT_SHIFT SLASH
-&kp LCTRL         &kp LEFT_GUI  &kp LANGUAGE_1  &lt 6 LANGUAGE_2  &lt 2 SPACE  &lt 7 LEFT_ALT  &kp BACKSPACE  &kp AT_SIGN  &lt 4 ENTER  &kp DELETE
+&kp LCTRL         &kp LEFT_GUI  &kp LANGUAGE_1  &lt 6 LANGUAGE_2  &lt 3 SPACE  &lt 7 LEFT_ALT  &kp BACKSPACE  &kp AT_SIGN  &lt 5 ENTER  &kp DELETE
             >;
         };
 
@@ -75,10 +75,10 @@
 
         Win-Function_Layer {
             bindings = <
-&kp LG(A)       &kp LG(X)     &kp LG(C)    &kp LG(V)  &kp LG(F)  &kp LESS_THAN         &kp GREATER_THAN       &kp CARET        &kp PERCENT    &kp DOLLAR
-&kp TAB         &kp LEFT_GUI  &kp LS(TAB)  &mkp MB1   &mkp MB2   &kp LEFT_PARENTHESIS  &kp RIGHT_PARENTHESIS  &kp AT_SIGN      &kp AMPERSAND  &kp DOUBLE_QUOTES
-&kp LEFT_SHIFT  &trans        &trans       &trans     &mkp MB3   &kp LEFT_BRACKET      &kp RIGHT_BRACKET      &kp EXCLAMATION  &kp QUESTION   &kp SQT
-&kp LCTRL       &trans        &trans       &trans     &trans     &trans                &kp BACKSPACE          &trans           &kp ENTER      &kp HASH
+&kp LC(A)       &kp LC(X)     &kp LC(C)    &kp LC(V)  &kp LS(LC(F))  &kp LESS_THAN         &kp GREATER_THAN       &kp CARET        &kp PERCENT    &kp DOLLAR
+&kp TAB         &kp LEFT_ALT  &kp LS(TAB)  &mkp MB1   &mkp MB2       &kp LEFT_PARENTHESIS  &kp RIGHT_PARENTHESIS  &kp AT_SIGN      &kp AMPERSAND  &kp DOUBLE_QUOTES
+&kp LEFT_SHIFT  &trans        &trans       &trans     &mkp MB3       &kp LEFT_BRACKET      &kp RIGHT_BRACKET      &kp EXCLAMATION  &kp QUESTION   &kp SQT
+&kp LCTRL       &trans        &trans       &trans     &trans         &trans                &kp BACKSPACE          &trans           &kp ENTER      &kp HASH
             >;
         };
 
@@ -93,10 +93,10 @@
 
         Win-Common_Layer {
             bindings = <
-&kp ESCAPE      &trans        &trans       &kp LG(UP_ARROW)    &trans               &kp LG(W)          &kp LG(LEFT_ARROW)  &mkp MB3        &kp LG(RIGHT_ARROW)  &kp HOME
-&kp TAB         &kp LEFT_GUI  &kp LS(TAB)  &kp LG(LEFT_ARROW)  &kp LG(RIGHT_ARROW)  &kp LC(PAGE_UP)    &mkp MB1            &kp UP_ARROW    &mkp MB2             &kp PAGE_UP
+&kp ESCAPE      &trans        &trans       &kp LG(UP_ARROW)    &trans               &kp LC(W)          &kp LA(LEFT_ARROW)  &mkp MB3        &kp LA(RIGHT_ARROW)  &kp HOME
+&kp TAB         &kp LEFT_ALT  &kp LS(TAB)  &kp LG(LEFT_ARROW)  &kp LG(RIGHT_ARROW)  &kp LC(PAGE_UP)    &mkp MB1            &kp UP_ARROW    &mkp MB2             &kp PAGE_UP
 &kp LEFT_SHIFT  &trans        &trans       &kp LG(DOWN_ARROW)  &trans               &kp LC(PAGE_DOWN)  &kp LEFT_ARROW      &kp DOWN_ARROW  &kp RIGHT_ARROW      &kp PAGE_DOWN
-&kp LCTRL       &trans        &trans       &trans              &trans               &trans             &trans              &kp LG(T)       &trans               &kp END
+&kp LCTRL       &trans        &trans       &trans              &trans               &trans             &trans              &kp LC(T)       &trans               &kp END
             >;
         };
 
@@ -111,10 +111,10 @@
 
         Setting_Layer {
             bindings = <
-&studio_unlock  &trans  &trans  &trans  &trans  &bt BT_SEL 0  &bt BT_SEL 1  &bt BT_SEL 2  &bt BT_SEL 3    &bt BT_SEL 4
-&trans          &trans  &trans  &trans  &trans  &trans        &trans        &trans        &trans          &trans
-&trans          &trans  &trans  &trans  &trans  &trans        &ind_bat      &trans        &trans          &bt BT_CLR
-&trans          &trans  &trans  &trans  &trans  &trans        &sys_reset    &bootloader   &studio_unlock  &bt BT_CLR_ALL
+&studio_unlock  &trans  &trans  &trans  &trans  &bt BT_SEL 0  &bt BT_SEL 1  &bt BT_SEL 2    &bt BT_SEL 3  &bt BT_SEL 4
+&trans          &trans  &trans  &trans  &trans  &trans        &trans        &trans          &trans        &trans
+&trans          &trans  &trans  &trans  &trans  &trans        &ind_bat      &trans          &trans        &bt BT_CLR
+&trans          &trans  &to 0   &to 1   &trans  &trans        &sys_reset    &studio_unlock  &bootloader   &bt BT_CLR_ALL
             >;
         };
     };
