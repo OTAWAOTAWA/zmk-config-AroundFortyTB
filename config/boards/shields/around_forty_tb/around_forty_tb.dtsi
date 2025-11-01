@@ -88,7 +88,6 @@ aroundFortytb_physical_layout: aroundFortytb_physical_layout {
     trackball_listener_R: trackball_listener_R {
       compatible = "zmk,input-listener";
       status = "disabled";
-      device = <&trackball_split_R>;
       input-processors = <&conditional_layer 4 &zip_xy_to_scroll_mapper>;
     };
 
