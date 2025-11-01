@@ -87,7 +87,8 @@ aroundFortytb_physical_layout: aroundFortytb_physical_layout {
 
     trackball_listener_R: trackball_listener_R {
       compatible = "zmk,input-listener";
-      status = "disabled";    
+      status = "disabled";
+      scroll-layers = <4>;
     };
 
 
