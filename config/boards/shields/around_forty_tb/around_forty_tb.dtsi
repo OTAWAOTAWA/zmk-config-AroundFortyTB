@@ -114,4 +114,21 @@ aroundFortytb_physical_layout: aroundFortytb_physical_layout {
                 , <&xiao_d 6 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)> 			
                 ;
     };
+
+/ {
+    scroll_behavior_x: scroll_behavior_x {
+        compatible = "zmk,behavior-sensor-scroll";
+        direction = "x";
+        scroll-scale = <1>;
+    };
+
+    scroll_behavior_y: scroll_behavior_y {
+        compatible = "zmk,behavior-sensor-scroll";
+        direction = "y";
+        scroll-scale = <1>;
+    };
+};
+
+
+
 };
