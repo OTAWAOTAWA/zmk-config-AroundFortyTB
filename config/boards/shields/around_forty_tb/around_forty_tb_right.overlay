@@ -42,8 +42,6 @@
 &trackball_listener_R {
     status = "okay";
     device = <&trackball_R>;
-  bindings = <&scroll_behavior_x>, <&scroll_behavior_y>;
-  layer = <SCROLL>;  // ← この行を追加
 };
 
 &spi0 {
