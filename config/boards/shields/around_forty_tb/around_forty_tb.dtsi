@@ -115,19 +115,7 @@ aroundFortytb_physical_layout: aroundFortytb_physical_layout {
                 ;
     };
 
-/ {
-    scroll_behavior_x: scroll_behavior_x {
-        compatible = "zmk,behavior-sensor-scroll";
-        direction = "x";
-        scroll-scale = <1>;
-    };
 
-    scroll_behavior_y: scroll_behavior_y {
-        compatible = "zmk,behavior-sensor-scroll";
-        direction = "y";
-        scroll-scale = <1>;
-    };
-};
 
 
 
