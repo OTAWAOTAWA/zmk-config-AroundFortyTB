@@ -89,7 +89,12 @@
         };
 
         scrool {
-            bindings = <&kp SCROLL>;
+            bindings = <
+&kp SCROLL  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
+            >;
         };
     };
 };
