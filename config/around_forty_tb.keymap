@@ -57,19 +57,19 @@
 
         suji {
             bindings = <
-&bt BT_SEL 0  &trans        &trans      &trans  &trans  &trans  &trans  &trans          &trans  &trans
-&bt BT_SEL 1  &trans        &trans      &trans  &trans  &trans  &trans  &trans          &trans  &trans
-&bt BT_SEL 2  &trans        &trans      &trans  &trans  &trans  &trans  &trans          &trans  &trans
-&bt BT_SEL 3  &bt BT_SEL 4  &bt BT_CLR  &trans  &trans  &trans  &trans  &bt BT_CLR_ALL  &trans  &trans
+&bt BT_SEL 0  &kp F1        &kp F2      &kp F3   &kp F4   &kp N7        &kp N8  &kp N9          &kp PLUS      &kp MINUS
+&bt BT_SEL 1  &kp F5        &kp F6      &kp F7   &kp F8   &kp N4        &kp N5  &kp N6          &kp ASTERISK  &kp FSLH
+&bt BT_SEL 2  &kp F9        &kp F10     &kp F11  &kp F12  &kp NUMBER_1  &kp N2  &kp N3          &kp DOT       &kp N0
+&bt BT_SEL 3  &bt BT_SEL 4  &bt BT_CLR  &trans   &trans   &kp EQUAL     &trans  &bt BT_CLR_ALL  &trans        &trans
             >;
         };
 
         kigo {
             bindings = <
-&trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
-&trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
-&trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
-&trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&kp AT_SIGN  &kp LEFT_BRACE  &kp RIGHT_BRACE    &kp LEFT_PARENTHESIS  &kp RIGHT_PARENTHESIS  &kp LCTRL    &kp EXCLAMATION       &kp PIPE        &kp GRAVE       &trans
+&kp HASH     &kp SQT         &kp DOUBLE_QUOTES  &kp LEFT_BRACKET      &kp RIGHT_BRACKET      &kp PERCENT  &kp AMPERSAND         &kp TILDE       &kp UP_ARROW    &kp UNDERSCORE
+&kp DOLLAR   &kp COLON       &kp SEMICOLON      &kp LESS_THAN         &kp GREATER_THAN       &kp SLASH    &kp NON_US_BACKSLASH  &kp LEFT_ARROW  &kp DOWN_ARROW  &kp RIGHT_ARROW
+&trans       &trans          &trans             &trans                &trans                 &trans       &trans                &trans          &trans          &trans
             >;
         };
 
