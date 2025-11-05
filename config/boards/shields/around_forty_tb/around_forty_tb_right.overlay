@@ -42,8 +42,9 @@
 };
 
 &trackball_listener_R {
+    status = "okay";
+    device = <&trackball_R>;
     scroller {
-        status = "okay";
         layers = <4>;
         input-processors = <&zip_xy_to_scroll_mapper>;
     };
