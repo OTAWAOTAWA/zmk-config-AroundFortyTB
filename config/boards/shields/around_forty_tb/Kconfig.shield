@@ -5,4 +5,4 @@ config SHIELD_AROUND_FORTY_BBN_LEFT
     def_bool $(shields_list_contains,around_forty_tb_left)
 
 config SHIELD_AROUND_FORTY_BBN_LEFTN
-    def_bool $(shields_list_contains,around_forty_tb_leftN)
+    def_bool $(shields_list_contains,AroundForty-RB_R)
