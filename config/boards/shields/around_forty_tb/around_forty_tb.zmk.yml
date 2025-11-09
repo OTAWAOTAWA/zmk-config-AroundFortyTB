@@ -1,6 +1,6 @@
 file_format: "1"
-id: AroundForty-TB
-name: AroundForty-TB
+id: AroundForty-BBN
+name: AroundForty-BBN
 type: shield
 url: https://github.com/razilyis/zmk-config-AroundForty-TB
 requires: [seeeduino_xiao_ble]
